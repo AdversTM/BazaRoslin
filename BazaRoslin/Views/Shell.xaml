@@ -4,8 +4,39 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BazaRoslin"
+        xmlns:prism="http://prismlibrary.com/"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="Baza roślin" Height="800" Width="1300">
+
+    <!--<Window.Background>
+        <ImageBrush ImageSource="Resources/background.png" Stretch="UniformToFill" />
+    </Window.Background>-->
+
     <Grid>
+
+        <!-- main bar -->
+        <!--<ItemsControl
+            x:Name="MainToolbar"
+            prism:RegionManager.RegionName="{x:Static vm:Region.MainToolBarRegion}" />-->
+
+        <!-- content -->
+        <!--<Grid>
+            <Controls:AnimatedTabControl
+                x:Name="PositionBuySellTab"
+                prism:RegionManager.RegionName="{x:Static inf:RegionNames.MainRegion}" />
+        </Grid>-->
+        <Grid>
+            <TabControl
+                x:Name="TabContent"
+                prism:RegionManager.RegionName="{x:Static local:Region.TabContentRegion}" />
+        </Grid>
+
+        <!-- details -->
+        <!--<Grid>
+            <ContentControl
+                x:Name="ActionContent"
+                prism:RegionManager.RegionName="{x:Static vm:Region.ActionRegion}" />
+        </Grid>-->
+
     </Grid>
 </Window>

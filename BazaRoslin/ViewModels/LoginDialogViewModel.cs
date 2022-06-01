@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
 using BazaRoslin.Event;
 using BazaRoslin.Model;
@@ -63,9 +62,9 @@ namespace BazaRoslin.ViewModels {
             MessageBox.Show("Podane dane są niepoprawne!", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
-        public override bool CanCloseDialog() {
-            return _loggedUser != null;
-        }
+        // public override bool CanCloseDialog() {
+            // return _loggedUser != null;
+        // }
 
         private void CloseDialog() {
             RaiseRequestClose(new DialogResult());

@@ -166,6 +166,7 @@
           <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.7.1\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
           <Private>True</Private>
         </Reference>
+        <Reference Include="System.Drawing" />
         <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
           <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
           <Private>True</Private>
@@ -201,22 +202,39 @@
         <Compile Include="Model\IUser.cs" />
         <Compile Include="Model\User.cs" />
         <Compile Include="Services\IUserStore.cs" />
-        <Compile Include="Services\IWindowManager.cs" />
-        <Compile Include="Services\MockUserStore.cs" />
+        <Compile Include="Services\Mock\MockPlantStore.cs" />
+        <Compile Include="Services\Mock\MockUserStore.cs" />
         <Compile Include="Util\Hash.cs" />
-        <Compile Include="ViewModels\DialogViewModelBase.cs" />
+        <Compile Include="Util\Image.cs" />
+        <Compile Include="ViewModels\Base\DialogViewModelBase.cs" />
+        <Compile Include="ViewModels\CatalogViewModel.cs" />
+        <Compile Include="ViewModels\DetailsViewModel.cs" />
         <Compile Include="ViewModels\LoginDialogViewModel.cs" />
+        <Compile Include="ViewModels\OffersViewModel.cs" />
         <Compile Include="ViewModels\ShellViewModel.cs" />
         <Compile Include="App.xaml.cs">
             <DependentUpon>App.xaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
+        <Compile Include="ViewModels\UserViewModel.cs" />
+        <Compile Include="Views\CatalogView.xaml.cs">
+          <DependentUpon>CatalogView.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Views\DetailsView.xaml.cs">
+          <DependentUpon>DetailsView.xaml</DependentUpon>
+        </Compile>
         <Compile Include="Views\LoginDialog.xaml.cs">
           <DependentUpon>LoginDialog.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Views\OffersView.xaml.cs">
+          <DependentUpon>OffersView.xaml</DependentUpon>
         </Compile>
         <Compile Include="Views\Shell.xaml.cs">
           <DependentUpon>Shell.xaml</DependentUpon>
           <SubType>Code</SubType>
+        </Compile>
+        <Compile Include="Views\UserView.xaml.cs">
+          <DependentUpon>UserView.xaml</DependentUpon>
         </Compile>
     </ItemGroup>
     <ItemGroup>
@@ -238,11 +256,18 @@
         <None Include="packages.config" />
     </ItemGroup>
     <ItemGroup>
+      <Page Include="Views\CatalogView.xaml" />
+      <Page Include="Views\DetailsView.xaml" />
       <Page Include="Views\LoginDialog.xaml" />
+      <Page Include="Views\OffersView.xaml" />
       <Page Include="Views\Shell.xaml">
         <Generator>MSBuild:Compile</Generator>
         <SubType>Designer</SubType>
       </Page>
+      <Page Include="Views\UserView.xaml" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Controls" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
