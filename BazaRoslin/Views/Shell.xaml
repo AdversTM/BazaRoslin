@@ -26,9 +26,7 @@
                 prism:RegionManager.RegionName="{x:Static inf:RegionNames.MainRegion}" />
         </Grid>-->
         <Grid>
-            <TabControl
-                x:Name="TabContent"
-                prism:RegionManager.RegionName="{x:Static local:Region.TabContentRegion}" />
+            <TabControl prism:RegionManager.RegionName="{x:Static local:Region.TabContentRegion}" />
         </Grid>
 
         <!-- details -->

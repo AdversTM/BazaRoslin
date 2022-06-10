@@ -1,0 +1,61 @@
+﻿<UserControl x:Class="BazaRoslin.Views.UserDetailsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:BazaRoslin.Views"
+             xmlns:st="http://schemas.spicytaco.io/"
+             xmlns:util="clr-namespace:BazaRoslin.Util"
+             mc:Ignorable="d"
+             d:DesignHeight="700" d:DesignWidth="700">
+
+    <UserControl.Resources>
+        <util:Base64ToImageConverter x:Key="Base64ToImageConverter" />
+
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="15 10" />
+        </Style>
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="100" />
+        </Grid.RowDefinitions>
+
+        <st:AutoGrid Grid.Column="0" Grid.Row="0" Columns="150,*" ChildMargin="3">
+            <Label Content="Nazwa:" />
+            <Label Content="{Binding Plant.Name}" />
+
+            <Label Content="Częstość podlewania:" />
+            <Label Content="{Binding Plant.WateringFrequency}" />
+
+            <Label Content="Nawożenie:" />
+            <Label Content="{Binding Plant.Fertilization}" />
+
+            <Label Content="Wielkość:" />
+            <Label Content="{Binding Plant.Size}" />
+
+            <Label Content="Początek wegetacji:" />
+            <Label Content="{Binding Plant.VegetationStart}" />
+
+            <Label Content="Koniec wegetacji:" />
+            <Label Content="{Binding Plant.VegetationEnd}" />
+
+            <Label Content="Temperatura otoczenia:" />
+            <Label Content="{Binding Plant.Temperature}" />
+        </st:AutoGrid>
+
+        <Image Grid.Column="1" Grid.Row="0" Source="{Binding Plant.Image, Converter={StaticResource Base64ToImageConverter}}"
+               VerticalAlignment="Top" />
+
+        <StackPanel Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left">
+            <Button Content="Usuń" Margin="30 0 0 0" Command="{Binding DeleteCommand}" />
+        </StackPanel>
+    </Grid>
+</UserControl>

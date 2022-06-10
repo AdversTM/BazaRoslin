@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using BazaRoslin.Event;
 using BazaRoslin.Model;
@@ -20,18 +21,12 @@ namespace BazaRoslin.ViewModels {
 
         public string Login {
             get => _login;
-            set {
-                _login = value;
-                RaisePropertyChanged();
-            }
+            set => SetProperty(ref _login, value);
         }
 
         public string Password {
             get => _password;
-            set {
-                _password = value;
-                RaisePropertyChanged();
-            }
+            set => SetProperty(ref _password, value);
         }
 
         public ICommand LoginCommand => _loginCommand ??=
@@ -61,10 +56,6 @@ namespace BazaRoslin.ViewModels {
 
             MessageBox.Show("Podane dane są niepoprawne!", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
         }
-
-        // public override bool CanCloseDialog() {
-            // return _loggedUser != null;
-        // }
 
         private void CloseDialog() {
             RaiseRequestClose(new DialogResult());

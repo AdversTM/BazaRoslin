@@ -1,7 +1,5 @@
-﻿using System.Windows.Controls;
-
-namespace BazaRoslin.Views {
-    public partial class DetailsView : UserControl {
+﻿namespace BazaRoslin.Views {
+    public partial class DetailsView {
         public DetailsView() {
             InitializeComponent();
         }

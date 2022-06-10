@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using BazaRoslin.Model;
+using BazaRoslin.Model.Impl;
 
 namespace BazaRoslin.Services.Mock {
     public class MockUserStore : IUserStore {

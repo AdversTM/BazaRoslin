@@ -13,7 +13,15 @@ namespace BazaRoslin {
             containerRegistry.RegisterInstance<IUserStore>(new MockUserStore());
             containerRegistry.RegisterInstance<IPlantStore>(new MockPlantStore());
 
-            containerRegistry.RegisterDialog<LoginDialog>("LoginDialog");
+            containerRegistry.RegisterDialog<LoginDialog>();
+            containerRegistry.RegisterDialog<OfferDialog>();
+
+            containerRegistry.RegisterForNavigation<DetailsView>();
+            containerRegistry.RegisterForNavigation<OffersView>();
+            containerRegistry.RegisterForNavigation<UserDetailsView>();
+
+            // var optionsBuilder = new DbContextOptionsBuilder<UserDbContext>();
+            // containerRegistry.RegisterInstance(optionsBuilder.Options);
         }
 
         protected override Window CreateShell() {
@@ -25,5 +33,6 @@ namespace BazaRoslin {
         public const string TabContentRegion = nameof(TabContentRegion);
         public const string DetailsRegion = nameof(DetailsRegion);
         public const string OffersRegion = nameof(OffersRegion);
+        public const string UserDetailsRegion = nameof(UserDetailsRegion);
     }
 }

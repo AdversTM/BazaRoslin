@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Windows;
 using BazaRoslin.Event;
 using BazaRoslin.Model;
@@ -17,23 +16,22 @@ namespace BazaRoslin.ViewModels {
         private IDialogService _dialogService;
         private IEventAggregator _eventAggregator;
         private IRegionManager _regionManager;
-        private IUserStore _userStore;
 
         private IUser? _loggedUser;
 
-        public ShellViewModel(IDialogService dialogService, IEventAggregator eventAggregator, IRegionManager regionManager, IContainer container, IUserStore userStore) {
-            _userStore = userStore;
+        public ShellViewModel(IDialogService dialogService, IEventAggregator eventAggregator, IRegionManager regionManager, IContainer container) {
             _eventAggregator = eventAggregator;
             _regionManager = regionManager;
             _dialogService = dialogService;
             
-            _eventAggregator.GetEvent<UserLoggedEvent>().Subscribe(user => _loggedUser = user);
+            _eventAggregator.GetEvent<UserLoggedEvent>().Subscribe(user => {
+                _loggedUser = user;
+                container.RegisterInstance(user, IfAlreadyRegistered.Replace);
+            });
             
             _regionManager.RegisterViewWithRegion<UserView>("TabContentRegion");
             _regionManager.RegisterViewWithRegion<CatalogView>("TabContentRegion");
-
-            // _regionManager.RegisterViewWithRegion<>();
-
+            
             var param = new DialogParameters();
             _dialogService.Show("LoginDialog", param, _ => {
                 if (_loggedUser == null) {

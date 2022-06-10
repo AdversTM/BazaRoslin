@@ -1,6 +1,6 @@
 ﻿namespace BazaRoslin.Views {
-    public partial class OffersView {
-        public OffersView() {
+    public partial class OfferDialog {
+        public OfferDialog() {
             InitializeComponent();
         }
     }

@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="..\packages\Microsoft.EntityFrameworkCore.Design.3.1.25\build\net461\Microsoft.EntityFrameworkCore.Design.props" Condition="Exists('..\packages\Microsoft.EntityFrameworkCore.Design.3.1.25\build\net461\Microsoft.EntityFrameworkCore.Design.props')" />
     <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -49,60 +50,64 @@
           <Private>True</Private>
         </Reference>
         <Reference Include="Microsoft.CSharp" />
-        <Reference Include="Microsoft.EntityFrameworkCore, Version=3.1.19.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
-          <HintPath>..\packages\Microsoft.EntityFrameworkCore.3.1.19\lib\netstandard2.0\Microsoft.EntityFrameworkCore.dll</HintPath>
+        <Reference Include="Microsoft.EntityFrameworkCore, Version=3.1.25.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
+          <HintPath>..\packages\Microsoft.EntityFrameworkCore.3.1.25\lib\netstandard2.0\Microsoft.EntityFrameworkCore.dll</HintPath>
           <Private>True</Private>
         </Reference>
-        <Reference Include="Microsoft.EntityFrameworkCore.Abstractions, Version=3.1.19.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
-          <HintPath>..\packages\Microsoft.EntityFrameworkCore.Abstractions.3.1.19\lib\netstandard2.0\Microsoft.EntityFrameworkCore.Abstractions.dll</HintPath>
+        <Reference Include="Microsoft.EntityFrameworkCore.Abstractions, Version=3.1.25.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
+          <HintPath>..\packages\Microsoft.EntityFrameworkCore.Abstractions.3.1.25\lib\netstandard2.0\Microsoft.EntityFrameworkCore.Abstractions.dll</HintPath>
           <Private>True</Private>
         </Reference>
-        <Reference Include="Microsoft.EntityFrameworkCore.Relational, Version=3.1.19.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
-          <HintPath>..\packages\Microsoft.EntityFrameworkCore.Relational.3.1.19\lib\netstandard2.0\Microsoft.EntityFrameworkCore.Relational.dll</HintPath>
+        <Reference Include="Microsoft.EntityFrameworkCore.Design, Version=3.1.25.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
+          <HintPath>..\packages\Microsoft.EntityFrameworkCore.Design.3.1.25\lib\netstandard2.0\Microsoft.EntityFrameworkCore.Design.dll</HintPath>
           <Private>True</Private>
         </Reference>
-        <Reference Include="Microsoft.Extensions.Caching.Abstractions, Version=3.1.19.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
-          <HintPath>..\packages\Microsoft.Extensions.Caching.Abstractions.3.1.19\lib\netstandard2.0\Microsoft.Extensions.Caching.Abstractions.dll</HintPath>
+        <Reference Include="Microsoft.EntityFrameworkCore.Relational, Version=3.1.25.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
+          <HintPath>..\packages\Microsoft.EntityFrameworkCore.Relational.3.1.25\lib\netstandard2.0\Microsoft.EntityFrameworkCore.Relational.dll</HintPath>
           <Private>True</Private>
         </Reference>
-        <Reference Include="Microsoft.Extensions.Caching.Memory, Version=3.1.19.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
-          <HintPath>..\packages\Microsoft.Extensions.Caching.Memory.3.1.19\lib\netstandard2.0\Microsoft.Extensions.Caching.Memory.dll</HintPath>
+        <Reference Include="Microsoft.Extensions.Caching.Abstractions, Version=3.1.25.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
+          <HintPath>..\packages\Microsoft.Extensions.Caching.Abstractions.3.1.25\lib\netstandard2.0\Microsoft.Extensions.Caching.Abstractions.dll</HintPath>
           <Private>True</Private>
         </Reference>
-        <Reference Include="Microsoft.Extensions.Configuration, Version=3.1.19.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
-          <HintPath>..\packages\Microsoft.Extensions.Configuration.3.1.19\lib\netstandard2.0\Microsoft.Extensions.Configuration.dll</HintPath>
+        <Reference Include="Microsoft.Extensions.Caching.Memory, Version=3.1.25.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
+          <HintPath>..\packages\Microsoft.Extensions.Caching.Memory.3.1.25\lib\netstandard2.0\Microsoft.Extensions.Caching.Memory.dll</HintPath>
           <Private>True</Private>
         </Reference>
-        <Reference Include="Microsoft.Extensions.Configuration.Abstractions, Version=3.1.19.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
-          <HintPath>..\packages\Microsoft.Extensions.Configuration.Abstractions.3.1.19\lib\netstandard2.0\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
+        <Reference Include="Microsoft.Extensions.Configuration, Version=3.1.25.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
+          <HintPath>..\packages\Microsoft.Extensions.Configuration.3.1.25\lib\netstandard2.0\Microsoft.Extensions.Configuration.dll</HintPath>
           <Private>True</Private>
         </Reference>
-        <Reference Include="Microsoft.Extensions.Configuration.Binder, Version=3.1.19.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
-          <HintPath>..\packages\Microsoft.Extensions.Configuration.Binder.3.1.19\lib\netstandard2.0\Microsoft.Extensions.Configuration.Binder.dll</HintPath>
+        <Reference Include="Microsoft.Extensions.Configuration.Abstractions, Version=3.1.25.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
+          <HintPath>..\packages\Microsoft.Extensions.Configuration.Abstractions.3.1.25\lib\netstandard2.0\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
           <Private>True</Private>
         </Reference>
-        <Reference Include="Microsoft.Extensions.DependencyInjection, Version=3.1.19.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
-          <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.3.1.19\lib\net461\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+        <Reference Include="Microsoft.Extensions.Configuration.Binder, Version=3.1.25.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
+          <HintPath>..\packages\Microsoft.Extensions.Configuration.Binder.3.1.25\lib\netstandard2.0\Microsoft.Extensions.Configuration.Binder.dll</HintPath>
           <Private>True</Private>
         </Reference>
-        <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=3.1.19.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
-          <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.3.1.19\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+        <Reference Include="Microsoft.Extensions.DependencyInjection, Version=3.1.25.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
+          <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.3.1.25\lib\net461\Microsoft.Extensions.DependencyInjection.dll</HintPath>
           <Private>True</Private>
         </Reference>
-        <Reference Include="Microsoft.Extensions.Logging, Version=3.1.19.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
-          <HintPath>..\packages\Microsoft.Extensions.Logging.3.1.19\lib\netstandard2.0\Microsoft.Extensions.Logging.dll</HintPath>
+        <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=3.1.25.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
+          <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.3.1.25\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
           <Private>True</Private>
         </Reference>
-        <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=3.1.19.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
-          <HintPath>..\packages\Microsoft.Extensions.Logging.Abstractions.3.1.19\lib\netstandard2.0\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+        <Reference Include="Microsoft.Extensions.Logging, Version=3.1.25.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
+          <HintPath>..\packages\Microsoft.Extensions.Logging.3.1.25\lib\netstandard2.0\Microsoft.Extensions.Logging.dll</HintPath>
           <Private>True</Private>
         </Reference>
-        <Reference Include="Microsoft.Extensions.Options, Version=3.1.19.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
-          <HintPath>..\packages\Microsoft.Extensions.Options.3.1.19\lib\netstandard2.0\Microsoft.Extensions.Options.dll</HintPath>
+        <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=3.1.25.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
+          <HintPath>..\packages\Microsoft.Extensions.Logging.Abstractions.3.1.25\lib\netstandard2.0\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
           <Private>True</Private>
         </Reference>
-        <Reference Include="Microsoft.Extensions.Primitives, Version=3.1.19.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
-          <HintPath>..\packages\Microsoft.Extensions.Primitives.3.1.19\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
+        <Reference Include="Microsoft.Extensions.Options, Version=3.1.25.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
+          <HintPath>..\packages\Microsoft.Extensions.Options.3.1.25\lib\netstandard2.0\Microsoft.Extensions.Options.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="Microsoft.Extensions.Primitives, Version=3.1.25.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
+          <HintPath>..\packages\Microsoft.Extensions.Primitives.3.1.25\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="Microsoft.Windows.Design.Extensibility, Version=4.3.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
@@ -143,6 +148,42 @@
         </Reference>
         <Reference Include="Prism.Wpf, Version=8.1.97.5141, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59">
           <HintPath>..\packages\Prism.Wpf.8.1.97\lib\net47\Prism.Wpf.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="SharpVectors.Converters.Wpf, Version=1.7.7.0, Culture=neutral, PublicKeyToken=b532964b8548be77">
+          <HintPath>..\packages\SharpVectors.1.7.7\lib\net47\SharpVectors.Converters.Wpf.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="SharpVectors.Core, Version=1.7.7.0, Culture=neutral, PublicKeyToken=7407205e337c98ef">
+          <HintPath>..\packages\SharpVectors.1.7.7\lib\net47\SharpVectors.Core.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="SharpVectors.Css, Version=1.7.7.0, Culture=neutral, PublicKeyToken=7a46e3f532fdb787">
+          <HintPath>..\packages\SharpVectors.1.7.7\lib\net47\SharpVectors.Css.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="SharpVectors.Dom, Version=1.7.7.0, Culture=neutral, PublicKeyToken=517340b6277b1a7a">
+          <HintPath>..\packages\SharpVectors.1.7.7\lib\net47\SharpVectors.Dom.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="SharpVectors.Model, Version=1.7.7.0, Culture=neutral, PublicKeyToken=2236cfc76b505845">
+          <HintPath>..\packages\SharpVectors.1.7.7\lib\net47\SharpVectors.Model.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="SharpVectors.Rendering.Gdi, Version=1.7.7.0, Culture=neutral, PublicKeyToken=03902092284347e3">
+          <HintPath>..\packages\SharpVectors.1.7.7\lib\net47\SharpVectors.Rendering.Gdi.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="SharpVectors.Rendering.Wpf, Version=1.7.7.0, Culture=neutral, PublicKeyToken=d0902381100df30e">
+          <HintPath>..\packages\SharpVectors.1.7.7\lib\net47\SharpVectors.Rendering.Wpf.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="SharpVectors.Runtime.Wpf, Version=1.7.7.0, Culture=neutral, PublicKeyToken=d16e717f0a981fb9">
+          <HintPath>..\packages\SharpVectors.1.7.7\lib\net47\SharpVectors.Runtime.Wpf.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="SpicyTaco.AutoGrid, Version=1.2.29.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\packages\SpicyTaco.AutoGrid.1.2.29\lib\net40\SpicyTaco.AutoGrid.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="System" />
@@ -198,24 +239,48 @@
             <Generator>MSBuild:Compile</Generator>
             <SubType>Designer</SubType>
         </ApplicationDefinition>
+        <Compile Include="Event\AddUserPlantEvent.cs" />
+        <Compile Include="Event\DeleteUserPlantEvent.cs" />
         <Compile Include="Event\UserLoggedEvent.cs" />
+        <Compile Include="Model\ICategory.cs" />
+        <Compile Include="Model\IDisplayable.cs" />
+        <Compile Include="Model\Impl\Category.cs" />
+        <Compile Include="Model\Impl\Offer.cs" />
+        <Compile Include="Model\Impl\Plant.cs" />
+        <Compile Include="Model\Impl\Shop.cs" />
+        <Compile Include="Model\Impl\User.cs" />
+        <Compile Include="Model\Impl\UserPlant.cs" />
+        <Compile Include="Model\IOffer.cs" />
+        <Compile Include="Model\IPlant.cs" />
+        <Compile Include="Model\IShop.cs" />
         <Compile Include="Model\IUser.cs" />
-        <Compile Include="Model\User.cs" />
+        <Compile Include="Model\IUserPlant.cs" />
+        <Compile Include="Services\Entity\Base\BaseDbContext.cs" />
+        <Compile Include="Services\Entity\PlantDbContext.cs" />
+        <Compile Include="Services\Entity\UserDbContext.cs" />
+        <Compile Include="Services\IPlantStore.cs" />
         <Compile Include="Services\IUserStore.cs" />
         <Compile Include="Services\Mock\MockPlantStore.cs" />
         <Compile Include="Services\Mock\MockUserStore.cs" />
+        <Compile Include="Util\Base64ToImageConverter.cs" />
+        <Compile Include="Util\Configuration.cs" />
+        <Compile Include="Util\DebugConverter.cs" />
         <Compile Include="Util\Hash.cs" />
         <Compile Include="Util\Image.cs" />
+        <Compile Include="Util\ObjectExtensions.cs" />
+        <Compile Include="Util\ToStringConverter.cs" />
         <Compile Include="ViewModels\Base\DialogViewModelBase.cs" />
         <Compile Include="ViewModels\CatalogViewModel.cs" />
         <Compile Include="ViewModels\DetailsViewModel.cs" />
         <Compile Include="ViewModels\LoginDialogViewModel.cs" />
+        <Compile Include="ViewModels\OfferDialogViewModel.cs" />
         <Compile Include="ViewModels\OffersViewModel.cs" />
         <Compile Include="ViewModels\ShellViewModel.cs" />
         <Compile Include="App.xaml.cs">
             <DependentUpon>App.xaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
+        <Compile Include="ViewModels\UserDetailsViewModel.cs" />
         <Compile Include="ViewModels\UserViewModel.cs" />
         <Compile Include="Views\CatalogView.xaml.cs">
           <DependentUpon>CatalogView.xaml</DependentUpon>
@@ -226,6 +291,9 @@
         <Compile Include="Views\LoginDialog.xaml.cs">
           <DependentUpon>LoginDialog.xaml</DependentUpon>
         </Compile>
+        <Compile Include="Views\OfferDialog.xaml.cs">
+          <DependentUpon>OfferDialog.xaml</DependentUpon>
+        </Compile>
         <Compile Include="Views\OffersView.xaml.cs">
           <DependentUpon>OffersView.xaml</DependentUpon>
         </Compile>
@@ -233,9 +301,14 @@
           <DependentUpon>Shell.xaml</DependentUpon>
           <SubType>Code</SubType>
         </Compile>
+        <Compile Include="Views\UserDetailsView.xaml.cs">
+          <DependentUpon>UserDetailsView.xaml</DependentUpon>
+        </Compile>
         <Compile Include="Views\UserView.xaml.cs">
           <DependentUpon>UserView.xaml</DependentUpon>
         </Compile>
+        <Compile Include="Views\Util\FollowingTemplateSelector.cs" />
+        <Compile Include="Views\Util\RatingTemplateSelector.cs" />
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Properties\AssemblyInfo.cs">
@@ -259,15 +332,28 @@
       <Page Include="Views\CatalogView.xaml" />
       <Page Include="Views\DetailsView.xaml" />
       <Page Include="Views\LoginDialog.xaml" />
+      <Page Include="Views\OfferDialog.xaml" />
       <Page Include="Views\OffersView.xaml" />
       <Page Include="Views\Shell.xaml">
         <Generator>MSBuild:Compile</Generator>
         <SubType>Designer</SubType>
       </Page>
+      <Page Include="Views\UserDetailsView.xaml" />
       <Page Include="Views\UserView.xaml" />
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="Controls" />
+      <Resource Include="Resources\heart-circle-plus-solid.svg" />
+    </ItemGroup>
+    <ItemGroup>
+      <Resource Include="Resources\heart-circle-minus-solid.svg" />
+      <Resource Include="Resources\star-regular.svg" />
+      <Resource Include="Resources\star-solid.svg" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+      <PropertyGroup>
+        <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
+      </PropertyGroup>
+      <Error Condition="!Exists('..\packages\Microsoft.EntityFrameworkCore.Design.3.1.25\build\net461\Microsoft.EntityFrameworkCore.Design.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.EntityFrameworkCore.Design.3.1.25\build\net461\Microsoft.EntityFrameworkCore.Design.props'))" />
+    </Target>
 </Project>

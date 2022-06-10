@@ -1,0 +1,150 @@
+﻿<UserControl x:Class="BazaRoslin.Views.OfferDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:st="http://schemas.spicytaco.io/"
+             xmlns:util="clr-namespace:BazaRoslin.Util"
+             xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+             xmlns:vm="clr-namespace:BazaRoslin.ViewModels"
+             xmlns:vutil="clr-namespace:BazaRoslin.Views.Util"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             FocusManager.FocusedElement="{Binding ElementName=Root}"
+             Height="250" Width="400">
+
+    <prism:Dialog.WindowStyle>
+        <Style TargetType="Window">
+            <Setter Property="prism:Dialog.WindowStartupLocation" Value="CenterScreen" />
+            <Setter Property="ResizeMode" Value="NoResize" />
+            <!-- <Setter Property="ShowInTaskbar" Value="False" /> -->
+            <Setter Property="SizeToContent" Value="WidthAndHeight" />
+        </Style>
+    </prism:Dialog.WindowStyle>
+
+    <UserControl.Resources>
+        <util:ToStringConverter x:Key="ToStringConverter" />
+        <vutil:FollowingTemplateSelector x:Key="FollowingTemplateSelector" />
+        <vutil:RatingTemplateSelector x:Key="RatingTemplateSelector" />
+
+        <!-- <Image Height="25" x:Key="HeartPlus" Source="{svgc:SvgImage ../Resources/heart-circle-plus-solid.svg}" /> -->
+        <!-- <Image Height="25" x:Key="HeartMinus" Source="{svgc:SvgImage ../Resources/heart-circle-minus-solid.svg}" /> -->
+        <!-- <Image Height="25" x:Key="StarSolid" Source="{svgc:SvgImage ../Resources/star-solid.svg}" x:Shared="False" /> -->
+        <!-- <Image Height="25" x:Key="StarRegular" Source="{svgc:SvgImage ../Resources/star-regular.svg}" x:Shared="False" /> -->
+
+        <DataTemplate x:Key="FollowingDataTemplate" DataType="{x:Type vm:OfferDialogViewModel}">
+            <Image Height="25" Source="{svgc:SvgImage ../Resources/heart-circle-minus-solid.svg}" />
+        </DataTemplate>
+        <DataTemplate x:Key="NotFollowingDataTemplate" DataType="{x:Type vm:OfferDialogViewModel}">
+            <Image Height="25" Source="{svgc:SvgImage ../Resources/heart-circle-plus-solid.svg}" />
+        </DataTemplate>
+        <DataTemplate x:Key="RatingSolidDataTemplate" DataType="{x:Type vm:OfferDialogViewModel}">
+            <Image Height="25" Source="{svgc:SvgImage ../Resources/star-solid.svg}" />
+        </DataTemplate>
+        <DataTemplate x:Key="RatingRegularDataTemplate" DataType="{x:Type vm:OfferDialogViewModel}">
+            <Image Height="25" Source="{svgc:SvgImage ../Resources/star-regular.svg}" />
+        </DataTemplate>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Padding" Value="5" />
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="0 5" />
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="15 10" />
+        </Style>
+        <Style TargetType="ContentControl">
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="1.5*" />
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" Content="{Binding Plant.Name}" FontSize="20" />
+
+        <DockPanel Grid.Row="1" Margin="20 0">
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                <ContentControl Content="{Binding Rating}"
+                                ContentTemplateSelector="{StaticResource RatingTemplateSelector}" Tag="0">
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="MouseDown">
+                            <prism:InvokeCommandAction
+                                Command="{Binding RateCommand}"
+                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ContentControl}}, Path=Tag}" />
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+                </ContentControl>
+                <ContentControl Content="{Binding Rating}"
+                                ContentTemplateSelector="{StaticResource RatingTemplateSelector}" Tag="1">
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="MouseDown">
+                            <prism:InvokeCommandAction
+                                Command="{Binding RateCommand}"
+                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ContentControl}}, Path=Tag}" />
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+                </ContentControl>
+                <ContentControl Content="{Binding Rating}"
+                                ContentTemplateSelector="{StaticResource RatingTemplateSelector}" Tag="2">
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="MouseDown">
+                            <prism:InvokeCommandAction
+                                Command="{Binding RateCommand}"
+                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ContentControl}}, Path=Tag}" />
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+                </ContentControl>
+                <ContentControl Content="{Binding Rating}"
+                                ContentTemplateSelector="{StaticResource RatingTemplateSelector}" Tag="3">
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="MouseDown">
+                            <prism:InvokeCommandAction
+                                Command="{Binding RateCommand}"
+                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ContentControl}}, Path=Tag}" />
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+                </ContentControl>
+                <ContentControl Content="{Binding Rating}"
+                                ContentTemplateSelector="{StaticResource RatingTemplateSelector}" Tag="4">
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="MouseDown">
+                            <prism:InvokeCommandAction
+                                Command="{Binding RateCommand}"
+                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ContentControl}}, Path=Tag}" />
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+                </ContentControl>
+            </StackPanel>
+            <ContentControl DockPanel.Dock="Right" HorizontalAlignment="Right" Content="{Binding Following}"
+                            ContentTemplateSelector="{StaticResource FollowingTemplateSelector}">
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="MouseDown">
+                        <prism:InvokeCommandAction Command="{Binding FollowCommand}" />
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+            </ContentControl>
+        </DockPanel>
+
+        <StackPanel Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <st:AutoGrid Columns="80,*" ChildMargin="3">
+                <Label Content="Sklep:" />
+                <Label Content="{Binding Offer.Shop.Name}" />
+
+                <Label Content="Cena:" />
+                <Label Content="{Binding Offer.PriceText}" />
+
+                <Label Content="Dostępność:" />
+                <Label Content="{Binding Offer.Availability, Converter={StaticResource ToStringConverter}}" />
+            </st:AutoGrid>
+        </StackPanel>
+
+        <StackPanel Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Button Content="Zakup" Command="{Binding BuyCommand}" />
+        </StackPanel>
+    </Grid>
+</UserControl>
