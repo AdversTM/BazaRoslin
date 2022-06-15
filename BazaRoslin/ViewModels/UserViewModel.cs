@@ -19,21 +19,15 @@ namespace BazaRoslin.ViewModels {
 
         private readonly IPlantStore _plantStore;
         private readonly IRegionManager _regionManager;
+        private readonly IAuthService _authService;
 
         private ICommand? _selectedCommand;
-        private IUser _user = null!;
         private ObservableCollection<IPlant> _plants = new();
 
         private string _filterText = "";
         private ICollectionView _filteredPlants = null!;
 
-        public IUser User {
-            get => _user;
-            set {
-                SetProperty(ref _user, value);
-                LoadPlants();
-            }
-        }
+        public IUser? User => _authService.CurrentUser;
 
         public string FilterText {
             get => _filterText;
@@ -47,11 +41,12 @@ namespace BazaRoslin.ViewModels {
 
         public ICommand SelectedCommand => _selectedCommand ??= new DelegateCommand<object>(NavigateDetails);
 
-        public UserViewModel(IEventAggregator eventAggregator, IPlantStore plantStore, IRegionManager regionManager, IUser user) {
+        public UserViewModel(IEventAggregator eventAggregator, IPlantStore plantStore, IRegionManager regionManager, IAuthService authService) {
             _plantStore = plantStore;
             _regionManager = regionManager;
-            User = user;
-            eventAggregator.GetEvent<UserLoggedEvent>().Subscribe(u => User = u);
+            _authService = authService;
+            
+            eventAggregator.GetEvent<UserLoggedEvent>().Subscribe(_ => LoadPlants(), ThreadOption.UIThread);
             eventAggregator.GetEvent<DeleteUserPlantEvent>().Subscribe(id => {
                 var plant = _plants.First(p => p.Id == id);
                 _plants.Remove(plant);
@@ -62,7 +57,10 @@ namespace BazaRoslin.ViewModels {
         }
 
         private async void LoadPlants() {
-            _plants = new ObservableCollection<IPlant>(await _plantStore.GetPlants(_user.Id));
+            if (!_authService.IsLogged) return;
+            var u = _authService.LoggedUser;
+            
+            _plants = new ObservableCollection<IPlant>(await _plantStore.GetPlants(u.Id));
 
             FilteredPlants = new ListCollectionView(_plants) {
                 Filter = o => string.IsNullOrWhiteSpace(FilterText) || ((IPlant)o).Name.ToLower().Contains(FilterText),
@@ -88,7 +86,7 @@ namespace BazaRoslin.ViewModels {
                 _regionManager.Regions[Region.UserDetailsRegion].RemoveAll();
                 return;
             }
-            
+
             var param = new NavigationParameters { { "Plant", plant } };
             _regionManager.RequestNavigate(Region.UserDetailsRegion, "UserDetailsView", param);
         }

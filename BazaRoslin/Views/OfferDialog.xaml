@@ -65,7 +65,7 @@
             <RowDefinition Height="1.5*" />
         </Grid.RowDefinitions>
 
-        <Label Grid.Row="0" Content="{Binding Plant.Name}" FontSize="20" />
+        <Label Grid.Row="0" Content="{Binding Plant.Name}" FontSize="20" Margin="5 0" />
 
         <DockPanel Grid.Row="1" Margin="20 0">
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">

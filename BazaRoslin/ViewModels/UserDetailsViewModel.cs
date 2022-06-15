@@ -13,8 +13,8 @@ namespace BazaRoslin.ViewModels {
 
         private readonly IEventAggregator _eventAggregator;
         private readonly IPlantStore _plantStore;
+        private readonly IAuthService _authService;
         
-        private IUser _user;
         private IPlant? _plant;
         
         private ICommand? _deleteCommand;
@@ -26,11 +26,11 @@ namespace BazaRoslin.ViewModels {
             set => SetProperty(ref _plant, value);
         }
 
-        public UserDetailsViewModel(IEventAggregator eventAggregator, IUser user, IPlantStore plantStore) {
+        public UserDetailsViewModel(IEventAggregator eventAggregator, IPlantStore plantStore, IAuthService authService) {
             _eventAggregator = eventAggregator;
-            _user = user;
             _plantStore = plantStore;
-            eventAggregator.GetEvent<UserLoggedEvent>().Subscribe(u => _user = u);
+            _authService = authService;
+            // eventAggregator.GetEvent<UserLoggedEvent>().Subscribe(u => _user = u);
         }
 
         public void OnNavigatedTo(NavigationContext navigationContext) {
@@ -51,7 +51,7 @@ namespace BazaRoslin.ViewModels {
                 return;
             
             var id = _plant!.Id;
-            _plantStore.DeletePlant(id, _user.Id);
+            _plantStore.DeletePlant(id, _authService.LoggedUser.Id);
             _eventAggregator.GetEvent<DeleteUserPlantEvent>().Publish(id);
         }
     }

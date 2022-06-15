@@ -8,7 +8,6 @@ using BazaRoslin.Services;
 using BazaRoslin.Util;
 using ImTools;
 using Prism.Commands;
-using Prism.DryIoc;
 using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
@@ -19,10 +18,10 @@ namespace BazaRoslin.ViewModels {
 
         private readonly IPlantStore _plantStore;
         private readonly IDialogService _dialogService;
+        private readonly IAuthService _authService;
 
         private ICommand? _offerCommand;
         private IPlant _plant = null!;
-        private IUser _user;
         private ObservableCollection<IOffer> _offers = new();
         private HashSet<int> _userPlants = new();
 
@@ -34,11 +33,11 @@ namespace BazaRoslin.ViewModels {
         public ICommand OfferCommand => _offerCommand ??= new DelegateCommand<IOffer>(OpenOffer);
 
         public OffersViewModel(IPlantStore plantStore, IDialogService dialogService, IEventAggregator eventAggregator,
-            IUser user) {
+            IAuthService authService) {
             _plantStore = plantStore;
             _dialogService = dialogService;
-            _user = user;
-            eventAggregator.GetEvent<UserLoggedEvent>().Subscribe(u => _user = u);
+            _authService = authService;
+            // eventAggregator.GetEvent<UserLoggedEvent>().Subscribe(u => _user = u);
             eventAggregator.GetEvent<DeleteUserPlantEvent>().Subscribe(id => _userPlants.Remove(id));
             eventAggregator.GetEvent<AddUserPlantEvent>().Subscribe(p => _userPlants.Add(p.Id));
         }
@@ -47,7 +46,7 @@ namespace BazaRoslin.ViewModels {
             _plant = navigationContext.Parameters.GetValue<IPlant>("Plant");
             _plantStore.GetOffers(_plant.Id).ContinueWith(task =>
                 Offers = new ObservableCollection<IOffer>(task.Result.Also(it => it.Sort())));
-            _plantStore.GetPlants(_user.Id).ContinueWith(task =>
+            _plantStore.GetPlants(_authService.LoggedUser.Id).ContinueWith(task =>
                 _userPlants = task.Result.Map(p => p.Id).ToHashSet());
         }
 
@@ -61,7 +60,7 @@ namespace BazaRoslin.ViewModels {
         private void OpenOffer(IOffer offer) {
             var buyable = !_userPlants.Contains(offer.PlantId);
             var param = new DialogParameters {
-                { "user", _user }, { "offer", offer }, { "plant", _plant }, { "buyable", buyable }
+                { "user", _authService.LoggedUser }, { "offer", offer }, { "plant", _plant }, { "buyable", buyable }
             };
             _dialogService.Show("OfferDialog", param, _ => { });
         }
