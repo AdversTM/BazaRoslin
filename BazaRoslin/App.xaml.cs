@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using BazaRoslin.Services;
+using BazaRoslin.Services.Entity;
 using BazaRoslin.Services.Impl;
-using BazaRoslin.Services.Mock;
 using BazaRoslin.Views;
 using Prism.Ioc;
 
@@ -11,10 +11,10 @@ namespace BazaRoslin {
     /// </summary>
     public partial class App {
         protected override void RegisterTypes(IContainerRegistry containerRegistry) {
-            containerRegistry.RegisterInstance<IUserStore>(new MockUserStore());
-            containerRegistry.RegisterInstance<IPlantStore>(new MockPlantStore());
-            // containerRegistry.RegisterInstance<IUserStore>(new UserDbContext(Configuration.ConnectionString));
-            // containerRegistry.RegisterInstance<IPlantStore>(new PlantDbContext(Configuration.ConnectionString));
+            // containerRegistry.RegisterInstance<IUserStore>(new MockUserStore());
+            // containerRegistry.RegisterInstance<IPlantStore>(new MockPlantStore());
+            containerRegistry.RegisterInstance<IUserStore>(new UserDbRepository());
+            containerRegistry.RegisterInstance<IPlantStore>(new PlantDbRepository());
 
             containerRegistry.RegisterSingleton<IAuthService, AuthService>();
 

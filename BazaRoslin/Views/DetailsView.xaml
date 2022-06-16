@@ -10,7 +10,7 @@
              d:DesignHeight="700" d:DesignWidth="430">
 
     <UserControl.Resources>
-        <util:Base64ToImageConverter x:Key="Base64ToImageConverter" />
+        <util:BytesToImageConverter x:Key="BytesToImageConverter" />
     </UserControl.Resources>
 
     <st:AutoGrid Columns="150,*" ChildMargin="3">
@@ -36,7 +36,7 @@
         <Label Content="{Binding Plant.Temperature}" />
 
         <Label Content="Zdjęcie:" Grid.ColumnSpan="2" />
-        <Image Source="{Binding Plant.Image, Converter={StaticResource Base64ToImageConverter}}"
+        <Image Source="{Binding Plant.Image, Converter={StaticResource BytesToImageConverter}}"
                Grid.ColumnSpan="2" />
     </st:AutoGrid>
 </UserControl>

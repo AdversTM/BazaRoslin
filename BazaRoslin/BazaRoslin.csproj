@@ -242,9 +242,14 @@
             <DependentUpon>App.xaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
+        <Compile Include="Model\Impl\PlantCategory.cs" />
+        <Compile Include="Model\IPlantCategory.cs" />
         <Compile Include="Services\Entity\Base\BaseDbContext.cs" />
-        <Compile Include="Services\Entity\PlantDbContext.cs" />
-        <Compile Include="Services\Entity\UserDbContext.cs" />
+        <Compile Include="Services\Entity\Base\BaseDbRepository.cs" />
+        <Compile Include="Services\Entity\Context\PlantDbContext.cs" />
+        <Compile Include="Services\Entity\Context\UserDbContext.cs" />
+        <Compile Include="Services\Entity\PlantDbRepository.cs" />
+        <Compile Include="Services\Entity\UserDbRepository.cs" />
         <Compile Include="Services\IAuthService.cs" />
         <Compile Include="Services\Impl\AuthService.cs" />
         <Compile Include="Services\IPlantStore.cs" />
@@ -252,6 +257,7 @@
         <Compile Include="Services\Mock\MockPlantStore.cs" />
         <Compile Include="Services\Mock\MockUserStore.cs" />
         <Compile Include="Util\Base64ToImageConverter.cs" />
+        <Compile Include="Util\BytesToImageConverter.cs" />
         <Compile Include="Util\Configuration.cs" />
         <Compile Include="Util\DebugConverter.cs" />
         <Compile Include="Util\Hash.cs" />

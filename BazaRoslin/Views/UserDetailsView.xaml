@@ -10,7 +10,7 @@
              d:DesignHeight="700" d:DesignWidth="700">
 
     <UserControl.Resources>
-        <util:Base64ToImageConverter x:Key="Base64ToImageConverter" />
+        <util:BytesToImageConverter x:Key="BytesToImageConverter" />
 
         <Style TargetType="Button">
             <Setter Property="Padding" Value="15 10" />
@@ -51,7 +51,7 @@
             <Label Content="{Binding Plant.Temperature}" />
         </st:AutoGrid>
 
-        <Image Grid.Column="1" Grid.Row="0" Source="{Binding Plant.Image, Converter={StaticResource Base64ToImageConverter}}"
+        <Image Grid.Column="1" Grid.Row="0" Source="{Binding Plant.Image, Converter={StaticResource BytesToImageConverter}}"
                VerticalAlignment="Top" />
 
         <StackPanel Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left">

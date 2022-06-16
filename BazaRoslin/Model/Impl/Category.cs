@@ -1,8 +1,20 @@
-﻿namespace BazaRoslin.Model.Impl {
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+
+namespace BazaRoslin.Model.Impl {
+    [Table("kategorie")]
     public class Category : ICategory {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        // public List<IPlant> Plants { get; set; } = new();
+        [Column("id_kategoria")] public int Id { get; set; }
+        [Column("nazwa")] public string Name { get; set; }
+
+        public List<PlantCategory> PlantCategories { get; set; } = null!;
+        
+        [NotMapped]
+        List<IPlantCategory> ICategory.PlantCategories {
+            get => PlantCategories.ToList<IPlantCategory>();
+            set => PlantCategories = value.Cast<PlantCategory>().ToList();
+        }
 
         public Category(int id, string name) {
             Id = id;
@@ -11,12 +23,12 @@
 
         public override bool Equals(object? obj) {
             if (ReferenceEquals(this, obj)) return true;
-            if (obj is not Category o) return false;
+            if (obj is not ICategory o) return false;
             return Id == o.Id;
         }
 
         public override string ToString() {
-            return $"{nameof(Category)}({nameof(Id)}={Id}, {nameof(Name)}={Name})";//, {nameof(Plants)}={Plants})";
+            return $"{nameof(Category)}({nameof(Id)}={Id}, {nameof(Name)}={Name})"; //, {nameof(Plants)}={Plants})";
         }
     }
 }

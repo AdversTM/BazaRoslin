@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using BazaRoslin.Model;
@@ -32,7 +34,7 @@ namespace BazaRoslin.ViewModels {
             set => SetProperty(ref _filteredPlants, value);
         }
 
-        public ICommand SelectedCommand => _selectedCommand ??= new DelegateCommand<Plant>(NavigateDetails);
+        public ICommand SelectedCommand => _selectedCommand ??= new DelegateCommand<object>(NavigateDetails);
 
         public CatalogViewModel(IPlantStore plantStore, IRegionManager regionManager) {
             _plantStore = plantStore;
@@ -56,7 +58,19 @@ namespace BazaRoslin.ViewModels {
             FilteredPlants.Refresh();
         }
 
-        private void NavigateDetails(IPlant plant) {
+        private void NavigateDetails(object arg) {
+            var plant = arg switch {
+                SelectionChangedEventArgs args => ((Selector)args.Source).SelectedItem as IPlant,
+                Plant plant1 => plant1,
+                _ => null
+            };
+
+            if (plant == null) {
+                // _regionManager.Regions[Region.DetailsRegion].RemoveAll();
+                // _regionManager.Regions[Region.OffersRegion].RemoveAll();
+                return;
+            }
+
             var param = new NavigationParameters { { "Plant", plant } };
             _regionManager.RequestNavigate(Region.DetailsRegion, "DetailsView", param);
             _regionManager.RequestNavigate(Region.OffersRegion, "OffersView", param);

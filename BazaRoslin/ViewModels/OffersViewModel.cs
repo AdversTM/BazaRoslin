@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using BazaRoslin.Event;
 using BazaRoslin.Model;
@@ -44,10 +45,12 @@ namespace BazaRoslin.ViewModels {
 
         public void OnNavigatedTo(NavigationContext navigationContext) {
             _plant = navigationContext.Parameters.GetValue<IPlant>("Plant");
-            _plantStore.GetOffers(_plant.Id).ContinueWith(task =>
-                Offers = new ObservableCollection<IOffer>(task.Result.Also(it => it.Sort())));
-            _plantStore.GetPlants(_authService.LoggedUser.Id).ContinueWith(task =>
-                _userPlants = task.Result.Map(p => p.Id).ToHashSet());
+            Task.Run(async () => {
+                var offers = await _plantStore.GetOffers(_plant.Id);
+                Offers = new ObservableCollection<IOffer>(offers.Also(it => it.Sort()));
+                var plants = await _plantStore.GetPlants(_authService.LoggedUser.Id);
+                _userPlants = plants.Map(p => p.Id).ToHashSet();
+            });
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext) {

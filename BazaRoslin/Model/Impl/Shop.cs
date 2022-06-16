@@ -1,7 +1,10 @@
-﻿namespace BazaRoslin.Model.Impl {
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace BazaRoslin.Model.Impl {
+    [Table("sklepy")]
     public class Shop : IShop {
-        public int Id { get; set; }
-        public string Name { get; set; }
+        [Column("id_sklep")] public int Id { get; set; }
+        [Column("nazwa")] public string Name { get; set; }
 
         public Shop(int id, string name) {
             Id = id;
@@ -10,7 +13,7 @@
 
         public override bool Equals(object? obj) {
             if (ReferenceEquals(this, obj)) return true;
-            if (obj is not Shop o) return false;
+            if (obj is not IShop o) return false;
             return Id == o.Id && Name == o.Name;
         }
 

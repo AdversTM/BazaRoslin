@@ -46,7 +46,10 @@ namespace BazaRoslin.ViewModels {
             _regionManager = regionManager;
             _authService = authService;
             
-            eventAggregator.GetEvent<UserLoggedEvent>().Subscribe(_ => LoadPlants(), ThreadOption.UIThread);
+            eventAggregator.GetEvent<UserLoggedEvent>().Subscribe(_ => {
+                RaisePropertyChanged("User");
+                LoadPlants();
+            }, ThreadOption.UIThread);
             eventAggregator.GetEvent<DeleteUserPlantEvent>().Subscribe(id => {
                 var plant = _plants.First(p => p.Id == id);
                 _plants.Remove(plant);
