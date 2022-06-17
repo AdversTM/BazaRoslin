@@ -1,8 +1,9 @@
 namespace BazaRoslin.Model {
     public interface IUserPlant {
-        int PlantId { get; set; }
-        IPlant Plant { get; set; }
         int UserId { get; set; }
+        int PlantId { get; set; }
         IUser User { get; set; }
+        IPlant Plant { get; set; }
+
     }
 }

@@ -242,8 +242,14 @@
             <DependentUpon>App.xaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
+        <Compile Include="Event\OfferFollowEvent.cs" />
+        <Compile Include="Event\OfferUnfollowEvent.cs" />
+        <Compile Include="Model\Impl\OfferFollow.cs" />
         <Compile Include="Model\Impl\PlantCategory.cs" />
+        <Compile Include="Model\Impl\OfferRating.cs" />
+        <Compile Include="Model\IOfferFollow.cs" />
         <Compile Include="Model\IPlantCategory.cs" />
+        <Compile Include="Model\IOfferRating.cs" />
         <Compile Include="Services\Entity\Base\BaseDbContext.cs" />
         <Compile Include="Services\Entity\Base\BaseDbRepository.cs" />
         <Compile Include="Services\Entity\Context\PlantDbContext.cs" />
@@ -285,8 +291,8 @@
         <Compile Include="Views\Util\RatingTemplateSelector.cs" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Event\AddUserPlantEvent.cs" />
-        <Compile Include="Event\DeleteUserPlantEvent.cs" />
+        <Compile Include="Event\UserPlantAddEvent.cs" />
+        <Compile Include="Event\UserPlantDeleteEvent.cs" />
         <Compile Include="Event\UserLoggedEvent.cs" />
         <Compile Include="Event\UserPreLoginEvent.cs" />
         <Compile Include="Model\ICategory.cs" />

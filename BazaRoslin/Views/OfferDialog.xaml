@@ -120,7 +120,7 @@
                     </b:Interaction.Triggers>
                 </ContentControl>
             </StackPanel>
-            <ContentControl DockPanel.Dock="Right" HorizontalAlignment="Right" Content="{Binding Following}"
+            <ContentControl DockPanel.Dock="Right" HorizontalAlignment="Right" Content="{Binding IsFollowing}"
                             ContentTemplateSelector="{StaticResource FollowingTemplateSelector}">
                 <b:Interaction.Triggers>
                     <b:EventTrigger EventName="MouseDown">

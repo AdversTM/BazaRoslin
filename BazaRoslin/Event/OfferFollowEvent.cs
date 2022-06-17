@@ -1,6 +1,6 @@
 ﻿using Prism.Events;
 
 namespace BazaRoslin.Event {
-    public class DeleteUserPlantEvent : PubSubEvent<int> {
+    public class OfferFollowEvent : PubSubEvent<int> {
     }
 }

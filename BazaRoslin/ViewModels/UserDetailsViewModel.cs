@@ -16,6 +16,7 @@ namespace BazaRoslin.ViewModels {
         private readonly IAuthService _authService;
         
         private IPlant? _plant;
+        private bool _isOwned;
         
         private ICommand? _deleteCommand;
 
@@ -26,15 +27,18 @@ namespace BazaRoslin.ViewModels {
             set => SetProperty(ref _plant, value);
         }
 
+        public string DeleteVisibility => _isOwned ? "Visible" : "Hidden";
+
         public UserDetailsViewModel(IEventAggregator eventAggregator, IPlantStore plantStore, IAuthService authService) {
             _eventAggregator = eventAggregator;
             _plantStore = plantStore;
             _authService = authService;
-            // eventAggregator.GetEvent<UserLoggedEvent>().Subscribe(u => _user = u);
         }
 
         public void OnNavigatedTo(NavigationContext navigationContext) {
             Plant = navigationContext.Parameters.GetValue<IPlant>("Plant");
+            _isOwned = navigationContext.Parameters.GetValue<bool>("isOwned");
+            RaisePropertyChanged("DeleteVisibility");
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext) {
@@ -51,8 +55,8 @@ namespace BazaRoslin.ViewModels {
                 return;
             
             var id = _plant!.Id;
-            _plantStore.DeletePlant(id, _authService.LoggedUser.Id);
-            _eventAggregator.GetEvent<DeleteUserPlantEvent>().Publish(id);
+            _plantStore.DeleteUserPlant(_authService.LoggedUser.Id, id);
+            _eventAggregator.GetEvent<UserPlantDeleteEvent>().Publish(id);
         }
     }
 }

@@ -1,18 +1,22 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using BazaRoslin.Event;
 using BazaRoslin.Model;
-using BazaRoslin.Model.Impl;
 using BazaRoslin.Services;
+using BazaRoslin.Util;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
+using Prism.Services.Dialogs;
+
+#pragma warnings disable CS4014
 
 namespace BazaRoslin.ViewModels {
     public class UserViewModel : BindableBase {
@@ -20,14 +24,25 @@ namespace BazaRoslin.ViewModels {
         private readonly IPlantStore _plantStore;
         private readonly IRegionManager _regionManager;
         private readonly IAuthService _authService;
+        private readonly IDialogService _dialogService;
 
-        private ICommand? _selectedCommand;
+        private ICommand? _selectedOwnedCommand;
+        private ICommand? _selectedFollowingCommand;
+        private ICommand? _offerCommand;
+        
         private ObservableCollection<IPlant> _plants = new();
+        private ObservableCollection<IOfferFollow> _offerFollows = new();
 
         private string _filterText = "";
         private ICollectionView _filteredPlants = null!;
+        private bool _isOwnedDetails;
 
         public IUser? User => _authService.CurrentUser;
+
+        public ObservableCollection<IOfferFollow> OfferFollows {
+            get => _offerFollows;
+            set => SetProperty(ref _offerFollows, value);
+        }
 
         public string FilterText {
             get => _filterText;
@@ -39,23 +54,37 @@ namespace BazaRoslin.ViewModels {
             set => SetProperty(ref _filteredPlants, value);
         }
 
-        public ICommand SelectedCommand => _selectedCommand ??= new DelegateCommand<object>(NavigateDetails);
+        public ICommand SelectedOwnedCommand => _selectedOwnedCommand ??=
+            new DelegateCommand<object>(arg => NavigateDetails(arg, true));
 
-        public UserViewModel(IEventAggregator eventAggregator, IPlantStore plantStore, IRegionManager regionManager, IAuthService authService) {
+        public ICommand SelectedFollowingCommand => _selectedFollowingCommand ??=
+            new DelegateCommand<object>(arg => NavigateDetails(arg, false));
+
+        public ICommand OfferCommand => _offerCommand ??= new DelegateCommand<IOfferFollow>(OpenOffer);
+
+        public UserViewModel(IEventAggregator eventAggregator, IPlantStore plantStore, IRegionManager regionManager, IAuthService authService, IDialogService dialogService) {
             _plantStore = plantStore;
             _regionManager = regionManager;
             _authService = authService;
+            _dialogService = dialogService;
             
             eventAggregator.GetEvent<UserLoggedEvent>().Subscribe(_ => {
                 RaisePropertyChanged("User");
                 LoadPlants();
             }, ThreadOption.UIThread);
-            eventAggregator.GetEvent<DeleteUserPlantEvent>().Subscribe(id => {
-                var plant = _plants.First(p => p.Id == id);
+            eventAggregator.GetEvent<UserPlantAddEvent>().Subscribe(p => {
+                _plants.Add(p);
+            });
+            eventAggregator.GetEvent<UserPlantDeleteEvent>().Subscribe(id => {
+                var plant = _plants.FirstOrDefault(p => p.Id == id);
+                if (plant == null) return;
                 _plants.Remove(plant);
             });
-            eventAggregator.GetEvent<AddUserPlantEvent>().Subscribe(p => {
-                _plants.Add(p);
+            eventAggregator.GetEvent<OfferFollowEvent>().Subscribe(offerId => AddFollow(offerId));
+            eventAggregator.GetEvent<OfferUnfollowEvent>().Subscribe(offerId => {
+                var of = _offerFollows.FirstOrDefault(p => p.OfferId == offerId);
+                if (of == null) return;
+                _offerFollows.Remove(of);
             });
         }
 
@@ -64,6 +93,7 @@ namespace BazaRoslin.ViewModels {
             var u = _authService.LoggedUser;
             
             _plants = new ObservableCollection<IPlant>(await _plantStore.GetPlants(u.Id));
+            OfferFollows = new ObservableCollection<IOfferFollow>(await _plantStore.GetOfferFollows(u.Id));
 
             FilteredPlants = new ListCollectionView(_plants) {
                 Filter = o => string.IsNullOrWhiteSpace(FilterText) || ((IPlant)o).Name.ToLower().Contains(FilterText),
@@ -78,19 +108,30 @@ namespace BazaRoslin.ViewModels {
             FilteredPlants.Refresh();
         }
 
-        private void NavigateDetails(object arg) {
+        private async Task AddFollow(int offerId) {
+            var of = await _plantStore.NewOfferFollow(offerId, _authService.LoggedUser.Id);
+            if (_offerFollows.Contains(of)) return;
+            _offerFollows.Add(of);
+        }
+
+        private void NavigateDetails(object arg, bool isOwned) {
             var plant = arg switch {
-                SelectionChangedEventArgs args => ((Selector)args.Source).SelectedItem as IPlant,
-                Plant plant1 => plant1,
+                SelectionChangedEventArgs args =>
+                    ((Selector)args.Source).SelectedItem.Let(it => it as IPlant ?? (it as IOfferFollow)?.Offer.Plant),
+                IPlant p => p,
+                IOfferFollow of => of.Offer.Plant,
                 _ => null
             };
-
+            
             if (plant == null) {
-                _regionManager.Regions[Region.UserDetailsRegion].RemoveAll();
+                if (isOwned == _isOwnedDetails)
+                    _regionManager.Regions[Region.UserDetailsRegion].RemoveAll();
                 return;
             }
 
-            var param = new NavigationParameters { { "Plant", plant } };
+            _isOwnedDetails = isOwned;
+
+            var param = new NavigationParameters { { "Plant", plant }, { "isOwned", isOwned } };
             _regionManager.RequestNavigate(Region.UserDetailsRegion, "UserDetailsView", param);
         }
 
@@ -98,6 +139,19 @@ namespace BazaRoslin.ViewModels {
             base.OnPropertyChanged(args);
             if (args.PropertyName == "FilterText")
                 FilterPlants();
+        }
+        
+        private async void OpenOffer(IOfferFollow of) {
+            var u = _authService.LoggedUser;
+            var o = of.Offer;
+            var buyable = _plants.All(p => p.Id != o.PlantId);
+            var rating = await _plantStore.GetRating(o.Id, u.Id);
+            var follow = await _plantStore.IsFollow(o.Id, u.Id);
+            var param = new DialogParameters {
+                { "user", u }, { "offer", o }, { "plant", o.Plant }, { "buyable", buyable },
+                { "offerRating", rating }, { "offerFollow", follow }
+            };
+            _dialogService.Show("OfferDialog", param, _ => { });
         }
     }
 }

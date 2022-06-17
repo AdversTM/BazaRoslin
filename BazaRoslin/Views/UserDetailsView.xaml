@@ -55,7 +55,8 @@
                VerticalAlignment="Top" />
 
         <StackPanel Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left">
-            <Button Content="Usuń" Margin="30 0 0 0" Command="{Binding DeleteCommand}" />
+            <Button Content="Usuń" Margin="30 0 0 0" Command="{Binding DeleteCommand}"
+                    Visibility="{Binding DeleteVisibility}" />
         </StackPanel>
     </Grid>
 </UserControl>

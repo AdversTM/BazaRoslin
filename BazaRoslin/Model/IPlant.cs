@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 namespace BazaRoslin.Model {
-    public interface IPlant {
+    public interface IPlant : IDisplayable {
         int Id { get; set; }
         string Name { get; set; }
         byte[] Image { get; set; }
@@ -11,7 +11,7 @@ namespace BazaRoslin.Model {
         string VegetationStart { get; set; }
         string VegetationEnd { get; set; }
         int Temperature { get; set; }
-     
+
         public List<IPlantCategory> PlantCategories { get; set; }
     }
 }

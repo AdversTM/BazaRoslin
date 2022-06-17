@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using BazaRoslin.Event;
 using BazaRoslin.Model;
@@ -38,21 +37,19 @@ namespace BazaRoslin.ViewModels {
             _plantStore = plantStore;
             _dialogService = dialogService;
             _authService = authService;
-            // eventAggregator.GetEvent<UserLoggedEvent>().Subscribe(u => _user = u);
-            eventAggregator.GetEvent<DeleteUserPlantEvent>().Subscribe(id => _userPlants.Remove(id));
-            eventAggregator.GetEvent<AddUserPlantEvent>().Subscribe(p => _userPlants.Add(p.Id));
+            eventAggregator.GetEvent<UserPlantDeleteEvent>().Subscribe(id => _userPlants.Remove(id));
+            eventAggregator.GetEvent<UserPlantAddEvent>().Subscribe(p => _userPlants.Add(p.Id));
         }
 
-        public void OnNavigatedTo(NavigationContext navigationContext) {
+        public async void OnNavigatedTo(NavigationContext navigationContext) {
             _plant = navigationContext.Parameters.GetValue<IPlant>("Plant");
-            Task.Run(async () => {
-                var offers = await _plantStore.GetOffers(_plant.Id);
-                Offers = new ObservableCollection<IOffer>(offers.Also(it => it.Sort()));
-                var plants = await _plantStore.GetPlants(_authService.LoggedUser.Id);
-                _userPlants = plants.Map(p => p.Id).ToHashSet();
-            });
+            
+            var offers = await _plantStore.GetOffers(_plant.Id);
+            Offers = new ObservableCollection<IOffer>(offers.Also(it => it.Sort()));
+            var plants = await _plantStore.GetPlants(_authService.LoggedUser.Id);
+            _userPlants = plants.Map(p => p.Id).ToHashSet();
         }
-
+        
         public bool IsNavigationTarget(NavigationContext navigationContext) {
             return true;
         }
@@ -60,10 +57,14 @@ namespace BazaRoslin.ViewModels {
         public void OnNavigatedFrom(NavigationContext navigationContext) {
         }
 
-        private void OpenOffer(IOffer offer) {
+        private async void OpenOffer(IOffer offer) {
+            var u = _authService.LoggedUser;
             var buyable = !_userPlants.Contains(offer.PlantId);
+            var rating = await _plantStore.GetRating(offer.Id, u.Id);
+            var follow = await _plantStore.IsFollow(offer.Id, u.Id);
             var param = new DialogParameters {
-                { "user", _authService.LoggedUser }, { "offer", offer }, { "plant", _plant }, { "buyable", buyable }
+                { "user", u }, { "offer", offer }, { "plant", _plant }, { "buyable", buyable },
+                { "offerRating", rating }, { "offerFollow", follow }
             };
             _dialogService.Show("OfferDialog", param, _ => { });
         }

@@ -1,29 +1,29 @@
-﻿using System;
-using System.Windows.Input;
+﻿using System.Windows.Input;
+using BazaRoslin.Event;
 using BazaRoslin.Model;
 using BazaRoslin.Services;
 using Prism.Commands;
-using Prism.Regions;
+using Prism.Events;
 using Prism.Services.Dialogs;
 
 namespace BazaRoslin.ViewModels {
     public class OfferDialogViewModel : DialogViewModelBase {
 
-        private readonly IRegionManager _regionManager;
-        private readonly IUserStore _userStore;
+        private readonly IEventAggregator _eventAggregator;
+        private readonly IPlantStore _plantStore;
 
-        private ICommand? _buyCommand;
+        private DelegateCommand? _buyCommand;
         private ICommand? _rateCommand;
         private ICommand? _followCommand;
 
         private IUser _user = null!;
         private IOffer _offer = null!;
         private IPlant _plant = null!;
-        private bool _following = true;
-        private int _rating = 3;
+        private IOfferRating _rating = null!;
+        private bool _isFollowing;
         private bool _isBuyable;
 
-        public ICommand BuyCommand => _buyCommand ??= new DelegateCommand(Buy, () => Offer.Availability > 0 && IsBuyable);
+        public DelegateCommand BuyCommand => _buyCommand ??= new DelegateCommand(Buy, () => Offer.Availability > 0 && IsBuyable);
         public ICommand RateCommand => _rateCommand ??= new DelegateCommand<string>(Rate);
         public ICommand FollowCommand => _followCommand ??= new DelegateCommand(Follow);
 
@@ -37,14 +37,17 @@ namespace BazaRoslin.ViewModels {
             set => SetProperty(ref _plant, value);
         }
 
-        public bool Following {
-            get => _following;
-            set => SetProperty(ref _following, value);
+        public bool IsFollowing {
+            get => _isFollowing;
+            set => SetProperty(ref _isFollowing, value);
         }
 
         public int Rating {
-            get => _rating;
-            set => SetProperty(ref _rating, value);
+            get => (int)_rating.Rating;
+            set {
+                _rating.Rating = value;
+                RaisePropertyChanged();
+            }
         }
 
         public bool IsBuyable {
@@ -52,9 +55,10 @@ namespace BazaRoslin.ViewModels {
             set => SetProperty(ref _isBuyable, value);
         }
 
-        public OfferDialogViewModel(IRegionManager regionManager, IUserStore userStore) {
-            _regionManager = regionManager;
-            _userStore = userStore;
+        public OfferDialogViewModel(IEventAggregator eventAggregator, IPlantStore plantStore) {
+            _eventAggregator = eventAggregator;
+            _plantStore = plantStore;
+            
         }
 
         public override void OnDialogOpened(IDialogParameters parameters) {
@@ -62,25 +66,31 @@ namespace BazaRoslin.ViewModels {
             Offer = parameters.GetValue<IOffer>("offer");
             Plant = parameters.GetValue<IPlant>("plant");
             _isBuyable = parameters.GetValue<bool>("buyable");
-            //TODO: rating
+            _rating = parameters.GetValue<IOfferRating>("offerRating");
+            _isFollowing = parameters.GetValue<bool>("offerFollow");
         }
 
         private void Buy() {
-            
             IsBuyable = false;
-            
-            //TODO
+            BuyCommand.RaiseCanExecuteChanged();
+            _plantStore.AddUserPlant(_user.Id, _plant.Id);
+            _eventAggregator.GetEvent<UserPlantAddEvent>().Publish(_plant);
         }
 
         private void Rate(string tag) {
             var i = int.Parse(tag);
             Rating = i + 1;
-            //TODO
+            _plantStore.SetRating(_rating);
         }
 
         private void Follow() {
-            Following = !Following;
-            //TODO
+            IsFollowing = !IsFollowing;
+            _plantStore.SetFollow(_offer.Id, _user.Id, IsFollowing);
+            
+            if (IsFollowing)
+                _eventAggregator.GetEvent<OfferFollowEvent>().Publish(_offer.Id);
+            else
+                _eventAggregator.GetEvent<OfferUnfollowEvent>().Publish(_offer.Id);
         }
     }
 }

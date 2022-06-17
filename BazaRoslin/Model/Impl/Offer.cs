@@ -9,7 +9,14 @@ namespace BazaRoslin.Model.Impl {
         [Column("dostępność")] public int Availability { get; set; }
         [Column("cena")] public decimal Price { get; set; }
 
+        public Plant Plant { get; set; } = null!;
         public Shop Shop { get; set; } = null!;
+        
+        [NotMapped]
+        IPlant IOffer.Plant {
+            get => Plant;
+            set => Plant = (Plant)value;
+        }
 
         [NotMapped]
         IShop IOffer.Shop {

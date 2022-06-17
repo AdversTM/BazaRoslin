@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace BazaRoslin.Model.Impl {
     [Table("rośliny")]
-    public class Plant : IPlant, IDisplayable {
+    public class Plant : IPlant {
         [Column("id")] public int Id { get; set; }
         [Column("nazwa")] public string Name { get; set; }
         [Column("zdjęcie")] public byte[] Image { get; set; }

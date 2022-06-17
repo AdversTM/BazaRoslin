@@ -9,21 +9,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BazaRoslin.Services.Entity {
     public class PlantDbRepository : BaseDbRepository<PlantDbContext>, IPlantStore {
+        public Task<ICategory?> GetCategory(int id) => UseContext(ctx =>
+            (ICategory?)ctx.Categories.SingleOrDefault(c => c.Id == id));
 
-        public async Task<ICategory?> GetCategory(int id) {
-            return await Context.Categories.SingleOrDefaultAsync(c => c.Id == id);
-        }
+        public Task<IShop?> GetShop(int id) => UseContext(ctx =>
+            (IShop?)ctx.Shops.SingleOrDefault(s => s.Id == id));
 
-        public async Task<IShop?> GetShop(int id) {
-            return await Context.Shops.SingleOrDefaultAsync(s => s.Id == id);
-        }
-
-        public Task<List<IOffer>> GetOffers(int plantId) => UseContext(ctx => {
-            return ctx.Offers
+        public Task<List<IOffer>> GetOffers(int plantId) => UseContext(ctx =>
+            ctx.Offers
                 .Where(o => o.PlantId == plantId)
                 .Include(o => o.Shop)
-                .ToList<IOffer>();
-        });
+                .ToList<IOffer>());
 
         public Task<List<IPlant>> GetPlants(int userId) => UseContext(ctx => {
             var query = from up in ctx.UserPlants
@@ -46,11 +42,69 @@ namespace BazaRoslin.Services.Entity {
         public Task<List<IPlant>> GetPlants() => UseContext(ctx =>
             ctx.Plants.ToList<IPlant>());
 
-        public Task DeletePlant(int plantId, int userId) => UseContext(ctx => {
-            // Remove(Entry(new UserPlant(plantId, userId)));
-            ctx.Entry(new UserPlant(plantId, userId)).State = EntityState.Deleted;
+        public Task AddUserPlant(int userId, int plantId) => UseContext(ctx => {
+            var up = new UserPlant(userId, plantId);
+            if (ctx.UserPlants.Any(e => e.UserId == userId && e.PlantId == plantId)) return;
+            ctx.Add(up);
             ctx.SaveChanges();
-            // Database.ExecuteSqlCommand("Delete DepartmentMasters where DepartmentId = {0}", 8);
+        });
+
+        public Task DeleteUserPlant(int userId, int plantId) => UseContext(ctx => {
+            ctx.Entry(new UserPlant(userId, plantId)).State = EntityState.Deleted;
+            ctx.SaveChanges();
+        });
+
+        public async Task<IOfferRating> GetRating(int offerId, int userId) =>
+            await UseContext(ctx =>
+                ctx.OfferRatings.SingleOrDefault<IOfferRating>(or => or.OfferId == offerId && or.UserId == userId))
+            ?? new OfferRating(offerId, userId, 0);
+
+        public Task SetRating(IOfferRating offerRating) => UseContext(ctx => {
+            var or = (OfferRating)offerRating;
+            if (ctx.OfferRatings.Any(e => e.OfferId == offerRating.OfferId && e.UserId == offerRating.UserId))
+                ctx.Attach(or).State = EntityState.Modified;
+            else ctx.Add(or);
+            ctx.SaveChanges();
+        });
+
+        public Task<List<IOfferFollow>> GetOfferFollows(int userId) => UseContext(ctx =>
+            ctx.OfferFollows
+                .Where(of => of.UserId == userId)
+                .Include(of => of.Offer)
+                .ThenInclude(o => o.Plant)
+                .Include(of => of.Offer)
+                .ThenInclude(o => o.Shop)
+                .ToList<IOfferFollow>());
+
+        public Task<bool> IsFollow(int offerId, int userId) => UseContext(ctx =>
+            ctx.OfferFollows.Any(of => of.OfferId == offerId && of.UserId == userId));
+
+        public Task SetFollow(int offerId, int userId, bool isFollow) => UseContext(ctx => {
+            var of = new OfferFollow(offerId, userId);
+            var exists = ctx.OfferFollows.Any(e => e.OfferId == offerId && e.UserId == userId);
+            if (isFollow) {
+                if (exists) return;
+                var e = ctx.Entry(of);
+                if (e.State == EntityState.Added) return;
+                if (e.State == EntityState.Unchanged)
+                    e.State = EntityState.Modified;
+                else ctx.Add(of);
+                ctx.SaveChanges();
+            } else {
+                if (!exists) return;
+                var e = ctx.Entry(of);
+                if (e.State == EntityState.Detached || e.State == EntityState.Deleted) return;
+                e.State = EntityState.Deleted;
+                ctx.SaveChanges();
+            }
+        });
+
+        public Task<IOfferFollow> NewOfferFollow(int offerId, int userId) => UseContext(ctx => {
+            var o = ctx.Offers
+                .Include(o => o.Plant)
+                .Include(o => o.Shop)
+                .Single(o => o.Id == offerId)!;
+            return (IOfferFollow)new OfferFollow(offerId, userId) { Offer = o };
         });
     }
 }

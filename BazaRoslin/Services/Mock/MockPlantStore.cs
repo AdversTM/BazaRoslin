@@ -46,22 +46,42 @@ namespace BazaRoslin.Services.Mock {
             };
         }
 
-        public async Task<ICategory?> GetCategory(int id) => _categories.FirstOrDefault(c => c.Id == id);
+        public Task<ICategory?> GetCategory(int id) =>
+            Task.FromResult((ICategory?)_categories.FirstOrDefault(c => c.Id == id));
 
-        public async Task<IShop?> GetShop(int id) => _shops.FirstOrDefault(s => s.Id == id);
+        public Task<IShop?> GetShop(int id) =>
+            Task.FromResult((IShop?)_shops.FirstOrDefault(s => s.Id == id));
 
-        public async Task<List<IOffer>> GetOffers(int plantId) => _offers.FindAll(o => o.PlantId == plantId);
+        public Task<List<IOffer>> GetOffers(int plantId) =>
+            Task.FromResult(_offers.FindAll(o => o.PlantId == plantId));
 
-        public async Task<List<IPlant>> GetPlants(int userId) => new() { _plants.Find(p => p.Id == 1) };
+        public Task<List<IPlant>> GetPlants(int userId) =>
+            Task.FromResult<List<IPlant>>(new() { _plants.Find(p => p.Id == 1) });
 
-        public async Task<List<ICategory>> GetCategories() => _categories;
+        public Task<List<ICategory>> GetCategories() => Task.FromResult(_categories);
 
-        public async Task<List<IShop>> GetShops() => _shops;
+        public Task<List<IShop>> GetShops() => Task.FromResult(_shops);
 
-        public async Task<List<IPlant>> GetPlants() => _plants;
+        public Task<List<IPlant>> GetPlants() => Task.FromResult(_plants);
 
-        public async Task DeletePlant(int plantId, int userId) {
-            throw new System.NotImplementedException();
-        }
+        public Task AddUserPlant(int userId, int plantId) => Task.CompletedTask;
+
+        public Task DeleteUserPlant(int userId, int plantId) => Task.CompletedTask;
+
+        public Task<IOfferRating> GetRating(int offerId, int userId) =>
+            Task.FromResult<IOfferRating>(new OfferRating(offerId, userId, 1));
+
+        public Task SetRating(IOfferRating offerRating) => Task.CompletedTask;
+
+        public Task<List<IOfferFollow>> GetOfferFollows(int userId) =>
+            Task.FromResult<List<IOfferFollow>>(new());
+
+        public Task<bool> IsFollow(int offerId, int userId) => Task.FromResult(offerId % 2 == 0);
+
+        public Task SetFollow(int offerId, int userId, bool isFollow) => Task.CompletedTask;
+
+        public Task<IOfferFollow> NewOfferFollow(int offerId, int userId) => Task.FromResult<IOfferFollow>(
+            new OfferFollow(offerId, userId) { Offer = (Offer)_offers.Find(o => o.Id == offerId) }
+        );
     }
 }

@@ -8,6 +8,7 @@ namespace BazaRoslin.Model {
         int Availability { get; set; }
         decimal Price { get; set; }
         
+        IPlant Plant { get; set; }
         IShop Shop { get; set; }
         string PriceText { get; }
     }
