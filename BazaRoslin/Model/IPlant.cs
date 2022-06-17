@@ -10,8 +10,11 @@ namespace BazaRoslin.Model {
         int Size { get; set; }
         string VegetationStart { get; set; }
         string VegetationEnd { get; set; }
+        string Insolation { get; set; }
         int Temperature { get; set; }
-
-        public List<IPlantCategory> PlantCategories { get; set; }
+        
+        List<IPlantCategory> PlantCategories { get; set; }
+        string Categories { get; }
+        List<string> CategoriesList { get; }
     }
 }

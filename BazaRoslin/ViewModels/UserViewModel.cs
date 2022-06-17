@@ -3,13 +3,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using BazaRoslin.Event;
 using BazaRoslin.Model;
 using BazaRoslin.Services;
-using BazaRoslin.Util;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -33,6 +31,9 @@ namespace BazaRoslin.ViewModels {
         private ObservableCollection<IPlant> _plants = new();
         private ObservableCollection<IOfferFollow> _offerFollows = new();
 
+        private IPlant? _selectedPlant;
+        private IOfferFollow? _selectedFollow;
+
         private string _filterText = "";
         private ICollectionView _filteredPlants = null!;
         private bool _isOwnedDetails;
@@ -54,11 +55,21 @@ namespace BazaRoslin.ViewModels {
             set => SetProperty(ref _filteredPlants, value);
         }
 
+        public IPlant? SelectedPlant {
+            get => _selectedPlant;
+            set => SetProperty(ref _selectedPlant, value);
+        }
+
+        public IOfferFollow? SelectedFollow {
+            get => _selectedFollow;
+            set => SetProperty(ref _selectedFollow, value);
+        }
+
         public ICommand SelectedOwnedCommand => _selectedOwnedCommand ??=
-            new DelegateCommand<object>(arg => NavigateDetails(arg, true));
+            new DelegateCommand<SelectionChangedEventArgs>(arg => NavigateDetails(arg, true));
 
         public ICommand SelectedFollowingCommand => _selectedFollowingCommand ??=
-            new DelegateCommand<object>(arg => NavigateDetails(arg, false));
+            new DelegateCommand<SelectionChangedEventArgs>(arg => NavigateDetails(arg, false));
 
         public ICommand OfferCommand => _offerCommand ??= new DelegateCommand<IOfferFollow>(OpenOffer);
 
@@ -114,14 +125,12 @@ namespace BazaRoslin.ViewModels {
             _offerFollows.Add(of);
         }
 
-        private void NavigateDetails(object arg, bool isOwned) {
-            var plant = arg switch {
-                SelectionChangedEventArgs args =>
-                    ((Selector)args.Source).SelectedItem.Let(it => it as IPlant ?? (it as IOfferFollow)?.Offer.Plant),
-                IPlant p => p,
-                IOfferFollow of => of.Offer.Plant,
-                _ => null
-            };
+        private void NavigateDetails(SelectionChangedEventArgs args, bool isOwned) {
+            IPlant? plant = null;
+            if (args.AddedItems.Count == 1) {
+                var item = args.AddedItems[0];
+                plant = item as IPlant ?? (item as IOfferFollow)?.Offer.Plant;
+            }
             
             if (plant == null) {
                 if (isOwned == _isOwnedDetails)
@@ -130,8 +139,12 @@ namespace BazaRoslin.ViewModels {
             }
 
             _isOwnedDetails = isOwned;
+            if (isOwned)
+                SelectedFollow = null;
+            else
+                SelectedPlant = null;
 
-            var param = new NavigationParameters { { "Plant", plant }, { "isOwned", isOwned } };
+            var param = new NavigationParameters { { "plant", plant }, { "isOwned", isOwned } };
             _regionManager.RequestNavigate(Region.UserDetailsRegion, "UserDetailsView", param);
         }
 

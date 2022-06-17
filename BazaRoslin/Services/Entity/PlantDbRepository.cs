@@ -22,12 +22,14 @@ namespace BazaRoslin.Services.Entity {
                 .ToList<IOffer>());
 
         public Task<List<IPlant>> GetPlants(int userId) => UseContext(ctx => {
-            var query = from up in ctx.UserPlants
-                join plant in Context.Plants
-                    on up.PlantId equals plant.Id
-                where up.UserId.Equals(userId)
-                select plant;
-            return query.ToList<IPlant>();
+            return ctx.UserPlants
+                .AsNoTracking()
+                .Where(up => up.UserId == userId)
+                .Include(up => up.Plant)
+                .ThenInclude(p => p.PlantCategories)
+                .ThenInclude(pc => pc.Category)
+                .Select(up => up.Plant)
+                .ToList<IPlant>();
         });
 
         public Task<List<ICategory>> GetCategories() => UseContext(ctx =>
@@ -40,18 +42,28 @@ namespace BazaRoslin.Services.Entity {
             ctx.Shops.ToList<IShop>());
 
         public Task<List<IPlant>> GetPlants() => UseContext(ctx =>
-            ctx.Plants.ToList<IPlant>());
+            ctx.Plants
+                .Include(p => p.PlantCategories)
+                .ThenInclude(pc => pc.Category)
+                .ToList<IPlant>());
 
         public Task AddUserPlant(int userId, int plantId) => UseContext(ctx => {
             var up = new UserPlant(userId, plantId);
-            if (ctx.UserPlants.Any(e => e.UserId == userId && e.PlantId == plantId)) return;
-            ctx.Add(up);
+            if (ctx.UserPlants.Any(e => e.Equals(up))) return;
+            var e = ctx.Entry(up);
+            if (e.State == EntityState.Added) return;
+            
+            var local = ctx.UserPlants.Local.FirstOrDefault(en => en.Equals(up));
+            if (local != null) ctx.Entry(local).State = EntityState.Detached;
+            e.State = EntityState.Added;
             ctx.SaveChanges();
         });
 
         public Task DeleteUserPlant(int userId, int plantId) => UseContext(ctx => {
-            ctx.Entry(new UserPlant(userId, plantId)).State = EntityState.Deleted;
+            var up = new UserPlant(userId, plantId);
+            ctx.Entry(up).State = EntityState.Deleted;
             ctx.SaveChanges();
+            ctx.Database.ExecuteSqlInterpolated($"DELETE FROM `posiadane_rośliny` WHERE `id_użytkownik`={userId} AND `id_roślina`={plantId}");
         });
 
         public async Task<IOfferRating> GetRating(int offerId, int userId) =>
@@ -71,9 +83,11 @@ namespace BazaRoslin.Services.Entity {
             ctx.OfferFollows
                 .Where(of => of.UserId == userId)
                 .Include(of => of.Offer)
-                .ThenInclude(o => o.Plant)
-                .Include(of => of.Offer)
                 .ThenInclude(o => o.Shop)
+                .Include(of => of.Offer)
+                .ThenInclude(o => o.Plant)
+                .ThenInclude(p => p.PlantCategories)
+                .ThenInclude(pc => pc.Category)
                 .ToList<IOfferFollow>());
 
         public Task<bool> IsFollow(int offerId, int userId) => UseContext(ctx =>
@@ -93,7 +107,7 @@ namespace BazaRoslin.Services.Entity {
             } else {
                 if (!exists) return;
                 var e = ctx.Entry(of);
-                if (e.State == EntityState.Detached || e.State == EntityState.Deleted) return;
+                if (e.State is EntityState.Detached or EntityState.Deleted) return;
                 e.State = EntityState.Deleted;
                 ctx.SaveChanges();
             }

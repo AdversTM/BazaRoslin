@@ -5,7 +5,7 @@ using System.Linq;
 namespace BazaRoslin.Model.Impl {
     [Table("kategorie")]
     public class Category : ICategory {
-        [Column("id_kategoria")] public int Id { get; set; }
+        [Column("id")] public int Id { get; set; }
         [Column("nazwa")] public string Name { get; set; }
 
         public List<PlantCategory> PlantCategories { get; set; } = null!;

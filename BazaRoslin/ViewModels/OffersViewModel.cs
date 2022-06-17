@@ -6,7 +6,6 @@ using BazaRoslin.Event;
 using BazaRoslin.Model;
 using BazaRoslin.Services;
 using BazaRoslin.Util;
-using ImTools;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -42,12 +41,12 @@ namespace BazaRoslin.ViewModels {
         }
 
         public async void OnNavigatedTo(NavigationContext navigationContext) {
-            _plant = navigationContext.Parameters.GetValue<IPlant>("Plant");
+            _plant = navigationContext.Parameters.GetValue<IPlant>("plant");
             
             var offers = await _plantStore.GetOffers(_plant.Id);
             Offers = new ObservableCollection<IOffer>(offers.Also(it => it.Sort()));
             var plants = await _plantStore.GetPlants(_authService.LoggedUser.Id);
-            _userPlants = plants.Map(p => p.Id).ToHashSet();
+            _userPlants = plants.Select(p => p.Id).ToHashSet();
         }
         
         public bool IsNavigationTarget(NavigationContext navigationContext) {

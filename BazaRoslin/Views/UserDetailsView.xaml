@@ -46,9 +46,15 @@
 
             <Label Content="Koniec wegetacji:" />
             <Label Content="{Binding Plant.VegetationEnd}" />
+            
+            <Label Content="Nasłonecznienie:" />
+            <Label Content="{Binding Plant.Insolation}" />
 
             <Label Content="Temperatura otoczenia:" />
             <Label Content="{Binding Plant.Temperature}" />
+            
+            <Label Content="Kategorie:" />
+            <Label Content="{Binding Plant.Categories}" />
         </st:AutoGrid>
 
         <Image Grid.Column="1" Grid.Row="0" Source="{Binding Plant.Image, Converter={StaticResource BytesToImageConverter}}"

@@ -12,11 +12,8 @@ namespace BazaRoslin.ViewModels {
             set => SetProperty(ref _plant, value);
         }
 
-        public DetailsViewModel() {
-        }
-
         public void OnNavigatedTo(NavigationContext navigationContext) {
-            Plant = navigationContext.Parameters.GetValue<IPlant>("Plant");
+            Plant = navigationContext.Parameters.GetValue<IPlant>("plant");
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext) {

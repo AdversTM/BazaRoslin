@@ -36,7 +36,7 @@ namespace BazaRoslin.ViewModels {
         }
 
         public void OnNavigatedTo(NavigationContext navigationContext) {
-            Plant = navigationContext.Parameters.GetValue<IPlant>("Plant");
+            Plant = navigationContext.Parameters.GetValue<IPlant>("plant");
             _isOwned = navigationContext.Parameters.GetValue<bool>("isOwned");
             RaisePropertyChanged("DeleteVisibility");
         }

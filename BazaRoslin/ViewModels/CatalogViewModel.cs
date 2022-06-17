@@ -2,11 +2,9 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using BazaRoslin.Model;
-using BazaRoslin.Model.Impl;
 using BazaRoslin.Services;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -34,7 +32,8 @@ namespace BazaRoslin.ViewModels {
             set => SetProperty(ref _filteredPlants, value);
         }
 
-        public ICommand SelectedCommand => _selectedCommand ??= new DelegateCommand<object>(NavigateDetails);
+        public ICommand SelectedCommand =>
+            _selectedCommand ??= new DelegateCommand<SelectionChangedEventArgs>(NavigateDetails);
 
         public CatalogViewModel(IPlantStore plantStore, IRegionManager regionManager) {
             _plantStore = plantStore;
@@ -50,7 +49,7 @@ namespace BazaRoslin.ViewModels {
                 IsLiveFiltering = true,
                 LiveFilteringProperties = { nameof(IPlant.Name) }
             };
-            FilteredPlants.GroupDescriptions.Add(new PropertyGroupDescription("Category"));
+            FilteredPlants.GroupDescriptions.Add(new PropertyGroupDescription("CategoriesList"));
             FilteredPlants.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
         }
 
@@ -58,20 +57,11 @@ namespace BazaRoslin.ViewModels {
             FilteredPlants.Refresh();
         }
 
-        private void NavigateDetails(object arg) {
-            var plant = arg switch {
-                SelectionChangedEventArgs args => ((Selector)args.Source).SelectedItem as IPlant,
-                Plant plant1 => plant1,
-                _ => null
-            };
+        private void NavigateDetails(SelectionChangedEventArgs args) {
+            var plant = args.AddedItems.Count == 1 ? args.AddedItems[0] as IPlant : null;
+            if (plant == null) return;
 
-            if (plant == null) {
-                // _regionManager.Regions[Region.DetailsRegion].RemoveAll();
-                // _regionManager.Regions[Region.OffersRegion].RemoveAll();
-                return;
-            }
-
-            var param = new NavigationParameters { { "Plant", plant } };
+            var param = new NavigationParameters { { "plant", plant } };
             _regionManager.RequestNavigate(Region.DetailsRegion, "DetailsView", param);
             _regionManager.RequestNavigate(Region.OffersRegion, "OffersView", param);
         }

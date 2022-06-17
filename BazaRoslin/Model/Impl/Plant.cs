@@ -17,6 +17,8 @@ namespace BazaRoslin.Model.Impl {
         [Column("temperatura_otoczenia")] public int Temperature { get; set; }
         
         public List<PlantCategory> PlantCategories { get; set; } = null!;
+        public string Categories => string.Join(", ", PlantCategories.Select(pc => pc.Category.Name));
+        public List<string> CategoriesList => PlantCategories.Select(pc => pc.Category.Name).ToList();
 
         [NotMapped]
         List<IPlantCategory> IPlant.PlantCategories {
@@ -50,7 +52,7 @@ namespace BazaRoslin.Model.Impl {
                    $"{nameof(WateringFrequency)}={WateringFrequency}, {nameof(Fertilization)}={Fertilization}, " +
                    $"{nameof(Size)}={Size}, {nameof(VegetationStart)}={VegetationStart}, " +
                    $"{nameof(VegetationEnd)}={VegetationEnd}, {nameof(Insolation)}={Insolation}, " +
-                   $"{nameof(Temperature)}={Temperature})";
+                   $"{nameof(Temperature)}={Temperature}, {nameof(Categories)}={Categories})";
         }
     }
 }
