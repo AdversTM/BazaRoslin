@@ -3,46 +3,53 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:BazaRoslin.Views"
              xmlns:st="http://schemas.spicytaco.io/"
-             xmlns:util="clr-namespace:BazaRoslin.Util"
+             xmlns:conv="clr-namespace:BazaRoslin.Views.Converter"
              mc:Ignorable="d"
              d:DesignHeight="700" d:DesignWidth="430">
 
     <UserControl.Resources>
-        <util:BytesToImageConverter x:Key="BytesToImageConverter" />
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="8" />
+        </Style>
     </UserControl.Resources>
 
-    <st:AutoGrid Columns="150,*" ChildMargin="3">
-        <Label Content="Nazwa:" />
-        <Label Content="{Binding Plant.Name}" />
+    <st:AutoGrid Columns="150,*" Rows="32,32,32,32,32,32,32,32,32,*" ChildMargin="3">
+        <TextBlock Text="Nazwa:" />
+        <TextBlock Text="{Binding Plant.Name}" />
 
-        <Label Content="Częstość podlewania:" />
-        <Label Content="{Binding Plant.WateringFrequency}" />
+        <TextBlock Text="Częstość podlewania:" />
+        <TextBlock Text="{Binding Plant.WateringFrequency}" />
 
-        <Label Content="Nawożenie:" />
-        <Label Content="{Binding Plant.Fertilization}" />
+        <TextBlock Text="Nawożenie:" />
+        <TextBlock Text="{Binding Plant.Fertilization}" />
 
-        <Label Content="Wielkość:" />
-        <Label Content="{Binding Plant.Size}" />
+        <TextBlock Text="Wielkość:" />
+        <StackPanel Orientation="Horizontal" Margin="0">
+            <TextBlock Text="{Binding Plant.Size}" />
+            <TextBlock Text="cm" Margin="0 8 8 8" />
+        </StackPanel>
 
-        <Label Content="Początek wegetacji:" />
-        <Label Content="{Binding Plant.VegetationStart}" />
+        <TextBlock Text="Początek wegetacji:" />
+        <TextBlock Text="{Binding Plant.VegetationStart}" />
 
-        <Label Content="Koniec wegetacji:" />
-        <Label Content="{Binding Plant.VegetationEnd}" />
+        <TextBlock Text="Koniec wegetacji:" />
+        <TextBlock Text="{Binding Plant.VegetationEnd}" />
         
-        <Label Content="Nasłonecznienie:" />
-        <Label Content="{Binding Plant.Insolation}" />
+        <TextBlock Text="Nasłonecznienie:" />
+        <TextBlock Text="{Binding Plant.Insolation}" />
 
-        <Label Content="Temperatura otoczenia:" />
-        <Label Content="{Binding Plant.Temperature}" />
-        
-        <Label Content="Kategorie:" />
-        <Label Content="{Binding Plant.Categories}" />
+        <TextBlock Text="Temperatura otoczenia:" />
+        <StackPanel Orientation="Horizontal" Margin="0">
+            <TextBlock Text="{Binding Plant.Temperature}" />
+            <TextBlock Text="°C" Margin="0 8 8 8" />
+        </StackPanel>
 
-        <!-- <Label Content="Zdjęcie:" Grid.ColumnSpan="2" /> -->
-        <Image Source="{Binding Plant.Image, Converter={StaticResource BytesToImageConverter}}"
-               Grid.ColumnSpan="2" />
+        <TextBlock Text="Kategorie:" />
+        <TextBlock Text="{Binding Plant.Categories}" />
+
+        <Image Source="{Binding Plant.Image, Converter={conv:BytesToImageConverter}}"
+               VerticalAlignment="Stretch" Grid.ColumnSpan="2" />
+
     </st:AutoGrid>
 </UserControl>

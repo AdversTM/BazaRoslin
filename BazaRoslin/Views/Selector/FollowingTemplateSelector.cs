@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace BazaRoslin.Views.Util {
+namespace BazaRoslin.Views.Selector {
     public class FollowingTemplateSelector : DataTemplateSelector {
         public override DataTemplate? SelectTemplate(object item, DependencyObject container) {
             if (container is not FrameworkElement elem)

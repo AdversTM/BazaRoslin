@@ -9,6 +9,16 @@
          mc:Ignorable="d"
          Header="Katalog roślin"
          d:DesignHeight="800" d:DesignWidth="1300">
+    
+    <TabItem.Resources>
+        <Style TargetType="GroupBox">
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="Padding" Value="5" />
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Padding" Value="3" />
+        </Style>
+    </TabItem.Resources>
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -20,9 +30,9 @@
         <GroupBox Grid.Column="0" Header="Rośliny">
             <DockPanel>
                 <DockPanel DockPanel.Dock="Top">
-                    <TextBlock Text="Szukaj:" DockPanel.Dock="Left" />
+                    <TextBlock Text="Szukaj:" DockPanel.Dock="Left" Margin="0 0 5 10" VerticalAlignment="Center" />
                     <TextBox Text="{Binding FilterText, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
-                             DockPanel.Dock="Right" HorizontalAlignment="Stretch" />
+                             DockPanel.Dock="Right" HorizontalAlignment="Stretch" Margin="5 0 0 10" />
                 </DockPanel>
                 <ListBox DockPanel.Dock="Bottom" VerticalAlignment="Stretch"
                          ItemsSource="{Binding FilteredPlants, Mode=OneWay}" DisplayMemberPath="ToDisplay"

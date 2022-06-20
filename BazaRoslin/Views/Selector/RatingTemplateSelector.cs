@@ -1,9 +1,7 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using ImTools;
 
-namespace BazaRoslin.Views.Util {
+namespace BazaRoslin.Views.Selector {
     public class RatingTemplateSelector : DataTemplateSelector {
         public override DataTemplate? SelectTemplate(object item, DependencyObject container) {
             if (container is not FrameworkElement elem)

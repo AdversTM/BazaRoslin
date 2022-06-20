@@ -58,7 +58,7 @@ namespace BazaRoslin.ViewModels {
         public OfferDialogViewModel(IEventAggregator eventAggregator, IPlantStore plantStore) {
             _eventAggregator = eventAggregator;
             _plantStore = plantStore;
-            
+            Title = "Oferta";
         }
 
         public override void OnDialogOpened(IDialogParameters parameters) {

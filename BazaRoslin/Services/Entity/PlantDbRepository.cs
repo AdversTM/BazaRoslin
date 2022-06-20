@@ -115,8 +115,10 @@ namespace BazaRoslin.Services.Entity {
 
         public Task<IOfferFollow> NewOfferFollow(int offerId, int userId) => UseContext(ctx => {
             var o = ctx.Offers
-                .Include(o => o.Plant)
                 .Include(o => o.Shop)
+                .Include(o => o.Plant)
+                .ThenInclude(p => p.PlantCategories)
+                .ThenInclude(pc => pc.Category)
                 .Single(o => o.Id == offerId)!;
             return (IOfferFollow)new OfferFollow(offerId, userId) { Offer = o };
         });

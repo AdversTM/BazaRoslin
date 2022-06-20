@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Markup;
 
-namespace BazaRoslin.Util {
+namespace BazaRoslin.Views.Converter {
     public class DebugConverter : MarkupExtension, IValueConverter {
         private static DebugConverter? _converter;
 

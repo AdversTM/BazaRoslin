@@ -10,6 +10,5 @@ namespace BazaRoslin.Model {
         
         IPlant Plant { get; set; }
         IShop Shop { get; set; }
-        string PriceText { get; }
     }
 }

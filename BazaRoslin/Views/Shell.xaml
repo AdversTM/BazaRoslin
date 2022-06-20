@@ -7,34 +7,7 @@
         xmlns:prism="http://prismlibrary.com/"
         mc:Ignorable="d"
         Title="Baza roślin" Height="800" Width="1300">
-
-    <!--<Window.Background>
-        <ImageBrush ImageSource="Resources/background.png" Stretch="UniformToFill" />
-    </Window.Background>-->
-
     <Grid>
-
-        <!-- main bar -->
-        <!--<ItemsControl
-            x:Name="MainToolbar"
-            prism:RegionManager.RegionName="{x:Static vm:Region.MainToolBarRegion}" />-->
-
-        <!-- content -->
-        <!--<Grid>
-            <Controls:AnimatedTabControl
-                x:Name="PositionBuySellTab"
-                prism:RegionManager.RegionName="{x:Static inf:RegionNames.MainRegion}" />
-        </Grid>-->
-        <Grid>
-            <TabControl prism:RegionManager.RegionName="{x:Static local:Region.TabContentRegion}" />
-        </Grid>
-
-        <!-- details -->
-        <!--<Grid>
-            <ContentControl
-                x:Name="ActionContent"
-                prism:RegionManager.RegionName="{x:Static vm:Region.ActionRegion}" />
-        </Grid>-->
-
+        <TabControl prism:RegionManager.RegionName="{x:Static local:Region.TabContentRegion}" />
     </Grid>
 </Window>

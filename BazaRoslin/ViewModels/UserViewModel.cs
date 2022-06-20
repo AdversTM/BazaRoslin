@@ -71,7 +71,7 @@ namespace BazaRoslin.ViewModels {
         public ICommand SelectedFollowingCommand => _selectedFollowingCommand ??=
             new DelegateCommand<SelectionChangedEventArgs>(arg => NavigateDetails(arg, false));
 
-        public ICommand OfferCommand => _offerCommand ??= new DelegateCommand<IOfferFollow>(OpenOffer);
+        public ICommand OfferCommand => _offerCommand ??= new DelegateCommand<object>(OpenOffer);
 
         public UserViewModel(IEventAggregator eventAggregator, IPlantStore plantStore, IRegionManager regionManager, IAuthService authService, IDialogService dialogService) {
             _plantStore = plantStore;
@@ -154,7 +154,9 @@ namespace BazaRoslin.ViewModels {
                 FilterPlants();
         }
         
-        private async void OpenOffer(IOfferFollow of) {
+        private async void OpenOffer(object arg) {
+            if (arg is not IOfferFollow of) return;
+            
             var u = _authService.LoggedUser;
             var o = of.Offer;
             var buyable = _plants.All(p => p.Id != o.PlantId);

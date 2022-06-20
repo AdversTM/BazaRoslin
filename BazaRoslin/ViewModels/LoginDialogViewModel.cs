@@ -55,7 +55,6 @@ namespace BazaRoslin.ViewModels {
         }
 
         public override void OnDialogOpened(IDialogParameters parameters) {
-            // TryLogin();
         }
 
         public override void OnDialogClosed() {

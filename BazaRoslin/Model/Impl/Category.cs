@@ -28,7 +28,7 @@ namespace BazaRoslin.Model.Impl {
         }
 
         public override string ToString() {
-            return $"{nameof(Category)}({nameof(Id)}={Id}, {nameof(Name)}={Name})"; //, {nameof(Plants)}={Plants})";
+            return $"{nameof(Category)}({nameof(Id)}={Id}, {nameof(Name)}={Name})";
         }
     }
 }

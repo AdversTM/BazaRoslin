@@ -44,7 +44,7 @@
 
             <StackPanel Margin="0 15 0 0">
                 <TextBlock Text="Hasło:" />
-                <cb:CypherBox CypherText="{Binding Password, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
+                <cb:CypherBox CypherText="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                               CypherChar="•" />
             </StackPanel>
         </StackPanel>

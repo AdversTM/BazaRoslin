@@ -24,7 +24,6 @@ namespace BazaRoslin.Model.Impl {
             set => Shop = (Shop)value;
         }
 
-        [NotMapped] public string PriceText => $"{Price:F}";
         [NotMapped] public string ToDisplay => $"{Shop.Name} ({Price:F} zł) [{Availability} szt.]";
 
         public Offer(int id, int plantId, int shopId, int availability, decimal price) {

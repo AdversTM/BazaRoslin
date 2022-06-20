@@ -29,7 +29,7 @@ namespace BazaRoslin.ViewModels {
             set => SetProperty(ref _offers, value);
         }
 
-        public ICommand OfferCommand => _offerCommand ??= new DelegateCommand<IOffer>(OpenOffer);
+        public ICommand OfferCommand => _offerCommand ??= new DelegateCommand<object>(OpenOffer);
 
         public OffersViewModel(IPlantStore plantStore, IDialogService dialogService, IEventAggregator eventAggregator,
             IAuthService authService) {
@@ -56,7 +56,9 @@ namespace BazaRoslin.ViewModels {
         public void OnNavigatedFrom(NavigationContext navigationContext) {
         }
 
-        private async void OpenOffer(IOffer offer) {
+        private async void OpenOffer(object arg) {
+            if (arg is not IOffer offer) return;
+            
             var u = _authService.LoggedUser;
             var buyable = !_userPlants.Contains(offer.PlantId);
             var rating = await _plantStore.GetRating(offer.Id, u.Id);

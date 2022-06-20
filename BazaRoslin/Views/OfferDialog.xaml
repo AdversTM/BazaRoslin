@@ -3,32 +3,25 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:prism="http://prismlibrary.com/"
              xmlns:st="http://schemas.spicytaco.io/"
-             xmlns:util="clr-namespace:BazaRoslin.Util"
              xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
-             xmlns:vm="clr-namespace:BazaRoslin.ViewModels"
-             xmlns:vutil="clr-namespace:BazaRoslin.Views.Util"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:vm="clr-namespace:BazaRoslin.ViewModels"
+             xmlns:sel="clr-namespace:BazaRoslin.Views.Selector"
+             xmlns:conv="clr-namespace:BazaRoslin.Views.Converter"
              FocusManager.FocusedElement="{Binding ElementName=Root}"
-             Height="250" Width="400">
+             Height="270" Width="420">
 
     <prism:Dialog.WindowStyle>
         <Style TargetType="Window">
             <Setter Property="prism:Dialog.WindowStartupLocation" Value="CenterScreen" />
             <Setter Property="ResizeMode" Value="NoResize" />
-            <!-- <Setter Property="ShowInTaskbar" Value="False" /> -->
             <Setter Property="SizeToContent" Value="WidthAndHeight" />
         </Style>
     </prism:Dialog.WindowStyle>
 
     <UserControl.Resources>
-        <util:ToStringConverter x:Key="ToStringConverter" />
-        <vutil:FollowingTemplateSelector x:Key="FollowingTemplateSelector" />
-        <vutil:RatingTemplateSelector x:Key="RatingTemplateSelector" />
-
-        <!-- <Image Height="25" x:Key="HeartPlus" Source="{svgc:SvgImage ../Resources/heart-circle-plus-solid.svg}" /> -->
-        <!-- <Image Height="25" x:Key="HeartMinus" Source="{svgc:SvgImage ../Resources/heart-circle-minus-solid.svg}" /> -->
-        <!-- <Image Height="25" x:Key="StarSolid" Source="{svgc:SvgImage ../Resources/star-solid.svg}" x:Shared="False" /> -->
-        <!-- <Image Height="25" x:Key="StarRegular" Source="{svgc:SvgImage ../Resources/star-regular.svg}" x:Shared="False" /> -->
+        <sel:FollowingTemplateSelector x:Key="FollowingTemplateSelector" />
+        <sel:RatingTemplateSelector x:Key="RatingTemplateSelector" />
 
         <DataTemplate x:Key="FollowingDataTemplate" DataType="{x:Type vm:OfferDialogViewModel}">
             <Image Height="25" Source="{svgc:SvgImage ../Resources/heart-circle-minus-solid.svg}" />
@@ -47,7 +40,7 @@
             <Setter Property="Padding" Value="5" />
         </Style>
         <Style TargetType="TextBlock">
-            <Setter Property="Margin" Value="0 5" />
+            <Setter Property="Margin" Value="8" />
         </Style>
         <Style TargetType="Button">
             <Setter Property="Padding" Value="15 10" />
@@ -59,13 +52,13 @@
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="1.3*" />
             <RowDefinition Height="1*" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="3*" />
-            <RowDefinition Height="1.5*" />
+            <RowDefinition Height="2.5*" />
+            <RowDefinition Height="1.8*" />
         </Grid.RowDefinitions>
 
-        <Label Grid.Row="0" Content="{Binding Plant.Name}" FontSize="20" Margin="5 0" />
+        <TextBlock Grid.Row="0" Text="{Binding Plant.Name}" FontSize="20" Margin="20 10" />
 
         <DockPanel Grid.Row="1" Margin="20 0">
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
@@ -131,15 +124,18 @@
         </DockPanel>
 
         <StackPanel Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <st:AutoGrid Columns="80,*" ChildMargin="3">
-                <Label Content="Sklep:" />
-                <Label Content="{Binding Offer.Shop.Name}" />
+            <st:AutoGrid Columns="100,*" ChildMargin="3">
+                <TextBlock Text="Sklep:" />
+                <TextBlock Text="{Binding Offer.Shop.Name}" />
 
-                <Label Content="Cena:" />
-                <Label Content="{Binding Offer.PriceText}" />
+                <TextBlock Text="Cena:" />
+                <TextBlock Text="{Binding Offer.Price, Converter={conv:PriceConverter}}" />
 
-                <Label Content="Dostępność:" />
-                <Label Content="{Binding Offer.Availability, Converter={StaticResource ToStringConverter}}" />
+                <TextBlock Text="Dostępność:" />
+                <StackPanel Orientation="Horizontal" Margin="0">
+                    <TextBlock Text="{Binding Offer.Availability, Converter={conv:ToStringConverter}}" />
+                    <TextBlock Text="szt." Margin="0" VerticalAlignment="Center"/>
+                </StackPanel>
             </st:AutoGrid>
         </StackPanel>
 

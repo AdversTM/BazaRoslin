@@ -262,14 +262,10 @@
         <Compile Include="Services\IUserStore.cs" />
         <Compile Include="Services\Mock\MockPlantStore.cs" />
         <Compile Include="Services\Mock\MockUserStore.cs" />
-        <Compile Include="Util\Base64ToImageConverter.cs" />
-        <Compile Include="Util\BytesToImageConverter.cs" />
         <Compile Include="Util\Configuration.cs" />
-        <Compile Include="Util\DebugConverter.cs" />
         <Compile Include="Util\Hash.cs" />
         <Compile Include="Util\Image.cs" />
         <Compile Include="Util\ObjectExtensions.cs" />
-        <Compile Include="Util\ToStringConverter.cs" />
         <Compile Include="ViewModels\Base\DialogViewModelBase.cs" />
         <Compile Include="ViewModels\CatalogViewModel.cs" />
         <Compile Include="ViewModels\DetailsViewModel.cs" />
@@ -280,6 +276,11 @@
         <Compile Include="ViewModels\UserDetailsViewModel.cs" />
         <Compile Include="ViewModels\UserViewModel.cs" />
         <Compile Include="Views\CatalogView.xaml.cs" />
+        <Compile Include="Views\Converter\Base64ToImageConverter.cs" />
+        <Compile Include="Views\Converter\BytesToImageConverter.cs" />
+        <Compile Include="Views\Converter\DebugConverter.cs" />
+        <Compile Include="Views\Converter\PriceConverter.cs" />
+        <Compile Include="Views\Converter\ToStringConverter.cs" />
         <Compile Include="Views\DetailsView.xaml.cs" />
         <Compile Include="Views\LoginDialog.xaml.cs" />
         <Compile Include="Views\OfferDialog.xaml.cs" />
@@ -287,8 +288,8 @@
         <Compile Include="Views\Shell.xaml.cs" />
         <Compile Include="Views\UserDetailsView.xaml.cs" />
         <Compile Include="Views\UserView.xaml.cs" />
-        <Compile Include="Views\Util\FollowingTemplateSelector.cs" />
-        <Compile Include="Views\Util\RatingTemplateSelector.cs" />
+        <Compile Include="Views\Selector\FollowingTemplateSelector.cs" />
+        <Compile Include="Views\Selector\RatingTemplateSelector.cs" />
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Event\UserPlantAddEvent.cs" />

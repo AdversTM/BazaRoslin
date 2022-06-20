@@ -5,13 +5,10 @@ namespace BazaRoslin.Model.Impl {
     [Table("użytkownicy")]
     public class User : IUser {
         [Column("id_użytkownik")] public int Id { get; set; }
-        [Column("login")] public string Login { get; set; } = null!;
-        [Column("hasło")] public string Password { get; set; } = null!;
-        [Column("imię")] public string Name { get; set; } = null!;
-        [Column("nazwisko")] public string Surname { get; set; } = null!;
-
-        public User() {
-        }
+        [Column("login")] public string Login { get; set; }
+        [Column("hasło")] public string Password { get; set; }
+        [Column("imię")] public string Name { get; set; }
+        [Column("nazwisko")] public string Surname { get; set; }
 
         public User(int id, string login, string password, string name, string surname) {
             Id = id;

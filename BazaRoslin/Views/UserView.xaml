@@ -10,6 +10,19 @@
          mc:Ignorable="d"
          Header="Moje rośliny"
          d:DesignHeight="300" d:DesignWidth="300">
+    
+    <TabItem.Resources>
+        <Style TargetType="GroupBox">
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="Padding" Value="5" />
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Padding" Value="3" />
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="8" />
+        </Style>
+    </TabItem.Resources>
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -25,12 +38,12 @@
         
         <GroupBox Grid.Row="0" Grid.Column="0" Header="Użytkownik">
             <st:AutoGrid Columns="80,*" ChildMargin="3">
-                <Label Content="Login:" />
-                <Label Content="{Binding User.Login}" />
-                <Label Content="Imię:" />
-                <Label Content="{Binding User.Name}" />
-                <Label Content="Nazwisko:" />
-                <Label Content="{Binding User.Surname}" />
+                <TextBlock Text="Login:" />
+                <TextBlock Text="{Binding User.Login}" />
+                <TextBlock Text="Imię:" />
+                <TextBlock Text="{Binding User.Name}" />
+                <TextBlock Text="Nazwisko:" />
+                <TextBlock Text="{Binding User.Surname}" />
             </st:AutoGrid>
         </GroupBox>
         
@@ -54,12 +67,12 @@
             </DockPanel>
         </GroupBox>
         
-        <GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Header="Rośliny">
+        <GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Header="Posiadane rośliny">
             <DockPanel>
                 <DockPanel DockPanel.Dock="Top">
-                    <TextBlock Text="Szukaj:" DockPanel.Dock="Left" />
+                    <TextBlock Text="Szukaj:" DockPanel.Dock="Left" Margin="0 0 5 10" VerticalAlignment="Center" />
                     <TextBox Text="{Binding FilterText, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
-                             DockPanel.Dock="Right" HorizontalAlignment="Stretch" />
+                             DockPanel.Dock="Right" HorizontalAlignment="Stretch" Margin="5 0 0 10" />
                 </DockPanel>
                 <ListBox DockPanel.Dock="Bottom" VerticalAlignment="Stretch"
                          ItemsSource="{Binding FilteredPlants, Mode=OneWay}"
