@@ -40,6 +40,10 @@
           <HintPath>..\packages\CypherBox.1.0.0\lib\net40\CypherBoxControl.dll</HintPath>
           <Private>True</Private>
         </Reference>
+        <Reference Include="dotenv.net, Version=3.1.1.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\packages\dotenv.net.3.1.1\lib\netstandard2.0\dotenv.net.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
         <Reference Include="DryIoc, Version=4.7.7.0, Culture=neutral, PublicKeyToken=dfbf2bd50fcf7768">
           <HintPath>..\packages\DryIoc.dll.4.7.7\lib\net45\DryIoc.dll</HintPath>
           <Private>True</Private>
@@ -341,6 +345,14 @@
       <Page Include="Views\Shell.xaml" />
       <Page Include="Views\UserDetailsView.xaml" />
       <Page Include="Views\UserView.xaml" />
+    </ItemGroup>
+    <ItemGroup>
+      <Content Include=".env">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include=".env.example">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
