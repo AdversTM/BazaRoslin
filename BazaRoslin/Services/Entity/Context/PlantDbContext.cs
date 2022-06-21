@@ -15,7 +15,7 @@ namespace BazaRoslin.Services.Entity.Context {
         protected internal DbSet<Category> Categories { get; set; } = null!;
         protected internal DbSet<Shop> Shops { get; set; } = null!;
         protected internal DbSet<Plant> Plants { get; set; } = null!;
-        public DbSet<Offer> Offers { get; set; } = null!;
+        protected internal DbSet<Offer> Offers { get; set; } = null!;
         protected internal DbSet<PlantCategory> PlantCategories { get; set; } = null!;
         protected internal DbSet<UserPlant> UserPlants { get; set; } = null!;
         protected internal DbSet<OfferRating> OfferRatings { get; set; } = null!;
