@@ -1,0 +1,7 @@
+@startuml
+interface IOfferRating {
+    OfferId : int <<get>> <<set>>
+    UserId : int <<get>> <<set>>
+    Rating : decimal <<get>> <<set>>
+}
+@enduml

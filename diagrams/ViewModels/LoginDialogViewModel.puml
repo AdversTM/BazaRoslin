@@ -1,0 +1,19 @@
+@startuml
+class LoginDialogViewModel {
+    - _login : string = ""
+    - _password : string = ""
+    - _loginCommand : ICommand?
+    + Login : string <<get>> <<set>>
+    + Password : string <<get>> <<set>>
+    + LoginDialogViewModel(userStore:IUserStore, eventAggregator:IEventAggregator)
+    + <<override>> OnDialogOpened(parameters:IDialogParameters) : void
+    + <<override>> OnDialogClosed() : void
+    - <<async>> TryLogin() : void
+    - CloseDialog() : void
+}
+DialogViewModelBase <|-- LoginDialogViewModel
+LoginDialogViewModel --> "_userStore" IUserStore
+LoginDialogViewModel --> "_eventAggregator" IEventAggregator
+LoginDialogViewModel --> "_eventSubscription" SubscriptionToken
+LoginDialogViewModel --> "LoginCommand" ICommand
+@enduml

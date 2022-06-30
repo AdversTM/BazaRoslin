@@ -1,0 +1,7 @@
+@startuml
+class UserPlantAddEvent {
+}
+class "PubSubEvent`1"<T> {
+}
+"PubSubEvent`1" "<IPlant>" <|-- UserPlantAddEvent
+@enduml

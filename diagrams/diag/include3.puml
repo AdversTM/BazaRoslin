@@ -1,0 +1,142 @@
+@startuml
+interface IPlant {
+    Id : int <<get>> <<set>>
+    Name : string <<get>> <<set>>
+    WateringFrequency : string <<get>> <<set>>
+    Fertilization : string <<get>> <<set>>
+    Size : int <<get>> <<set>>
+    VegetationStart : string <<get>> <<set>>
+    VegetationEnd : string <<get>> <<set>>
+    Insolation : string <<get>> <<set>>
+    Temperature : int <<get>> <<set>>
+    Categories : string <<get>>
+}
+interface IAuthService {
+    + CurrentUser : IUser? <<get>>
+    + IsLogged : bool <<get>>
+}
+class CatalogViewModel {
+    - _selectedCommand : ICommand?
+    - _filterText : string = ""
+    + FilterText : string <<get>> <<set>>
+    + CatalogViewModel(plantStore:IPlantStore, regionManager:IRegionManager)
+    - <<async>> LoadPlants() : void
+    - FilterPlants() : void
+    - NavigateDetails(args:SelectionChangedEventArgs) : void
+    # <<override>> OnPropertyChanged(args:PropertyChangedEventArgs) : void
+}
+BindableBase <|-r- CatalogViewModel
+CatalogViewModel --> "_plantStore" IPlantStore
+CatalogViewModel -u-> "_regionManager" IRegionManager
+CatalogViewModel o-d-> "_filteredPlants" ICollectionView
+CatalogViewModel -d-> "FilteredPlants" ICollectionView
+CatalogViewModel --> "SelectedCommand" ICommand
+class DetailsViewModel {
+    - _plant : IPlant?
+    + Plant : IPlant? <<get>> <<set>>
+    + OnNavigatedTo(navigationContext:NavigationContext) : void
+    + IsNavigationTarget(navigationContext:NavigationContext) : bool
+    + OnNavigatedFrom(navigationContext:NavigationContext) : void
+}
+BindableBase <|-u- DetailsViewModel
+INavigationAware <|-u- DetailsViewModel
+class OffersViewModel {
+    - _offerCommand : ICommand?
+    + OffersViewModel(IPlantStore, IDialogService, IEventAggregator, IAuthService)
+    + <<async>> OnNavigatedTo(navigationContext:NavigationContext) : void
+    + IsNavigationTarget(navigationContext:NavigationContext) : bool
+    + OnNavigatedFrom(navigationContext:NavigationContext) : void
+    - <<async>> OpenOffer(arg:object) : void
+}
+class "ObservableCollection"<T> {
+}
+interface IPlantStore {
+    GetCategory(id:int) : Task<ICategory?>
+    GetShop(id:int) : Task<IShop?>
+    GetOffers(plantId:int) : Task<List<IOffer>>
+    GetPlants(userId:int) : Task<List<IPlant>>
+    GetCategories() : Task<List<ICategory>>
+    GetShops() : Task<List<IShop>>
+    GetPlants() : Task<List<IPlant>>
+    AddUserPlant(userId:int, plantId:int) : Task
+    DeleteUserPlant(userId:int, plantId:int) : Task
+    GetRating(offerId:int, userId:int) : Task<IOfferRating>
+    SetRating(offerRating:IOfferRating) : Task
+    GetOfferFollows(userId:int) : Task<List<IOfferFollow>>
+    IsFollow(offerId:int, userId:int) : Task<bool>
+    SetFollow(offerId:int, userId:int, isFollow:bool) : Task
+    NewOfferFollow(offerId:int, userId:int) : Task<IOfferFollow>
+}
+BindableBase <|-- OffersViewModel
+INavigationAware <|-- OffersViewModel
+OffersViewModel --> "_plantStore" IPlantStore
+OffersViewModel --> "_dialogService" IDialogService
+OffersViewModel --> "_authService" IAuthService
+OffersViewModel o-d-> "_plant" IPlant
+OffersViewModel o-u-> "_offers<IOffer>" "ObservableCollection"
+OffersViewModel -u-> "Offers<IOffer>" "ObservableCollection"
+OffersViewModel --> "OfferCommand" ICommand
+class ShellViewModel {
+    + ShellViewModel(IDialogService, IRegionManager, IAuthService)
+}
+BindableBase <|-l- ShellViewModel
+class UserDetailsViewModel {
+    - _plant : IPlant?
+    - _isOwned : bool
+    - _deleteCommand : ICommand?
+    + Plant : IPlant? <<get>> <<set>>
+    + DeleteVisibility : string <<get>>
+    + UserDetailsViewModel(IEventAggregator, IPlantStore, IAuthService)
+    + OnNavigatedTo(navigationContext:NavigationContext) : void
+    + IsNavigationTarget(navigationContext:NavigationContext) : bool
+    + OnNavigatedFrom(navigationContext:NavigationContext) : void
+    - Delete() : void
+}
+BindableBase <|-- UserDetailsViewModel
+INavigationAware <|-- UserDetailsViewModel
+UserDetailsViewModel -u-> "_eventAggregator" IEventAggregator
+UserDetailsViewModel --> "_plantStore" IPlantStore
+UserDetailsViewModel --> "_authService" IAuthService
+UserDetailsViewModel --> "DeleteCommand" ICommand
+class UserViewModel {
+    - _selectedOwnedCommand : ICommand?
+    - _selectedFollowingCommand : ICommand?
+    - _offerCommand : ICommand?
+    - _selectedPlant : IPlant?
+    - _selectedFollow : IOfferFollow?
+    - _filterText : string = ""
+    - _isOwnedDetails : bool
+    + User : IUser? <<get>>
+    + FilterText : string <<get>> <<set>>
+    + SelectedPlant : IPlant? <<get>> <<set>>
+    + SelectedFollow : IOfferFollow? <<get>> <<set>>
+    + UserViewModel(IEventAggregator, IPlantStore, IRegionManager, IAuthService, IDialogService)
+    - <<async>> LoadPlants() : void
+    - FilterPlants() : void
+    - <<async>> AddFollow(offerId:int) : Task
+    - NavigateDetails(args:SelectionChangedEventArgs, isOwned:bool) : void
+    # <<override>> OnPropertyChanged(args:PropertyChangedEventArgs) : void
+    - <<async>> OpenOffer(arg:object) : void
+}
+class "ObservableCollection"<T> {
+}
+BindableBase <|-- UserViewModel
+UserViewModel --> "_plantStore" IPlantStore
+UserViewModel -u-> "_regionManager" IRegionManager
+UserViewModel --> "_authService" IAuthService
+UserViewModel --> "_dialogService" IDialogService
+UserViewModel o-> "_plants<IPlant>" "ObservableCollection"
+UserViewModel o-> "_offerFollows<IOfferFollow>" "ObservableCollection"
+UserViewModel o-u-> "_filteredPlants" ICollectionView
+UserViewModel --> "OfferFollows<IOfferFollow>" "ObservableCollection"
+UserViewModel -u-> "FilteredPlants" ICollectionView
+UserViewModel --> "SelectedOwnedCommand" ICommand
+UserViewModel --> "SelectedFollowingCommand" ICommand
+UserViewModel --> "OfferCommand" ICommand
+interface ICommand
+interface IDialogService
+interface IEventAggregator
+interface INavigationAware
+interface IRegionManager
+interface ICollectionView
+@enduml

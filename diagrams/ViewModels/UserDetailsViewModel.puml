@@ -1,0 +1,20 @@
+@startuml
+class UserDetailsViewModel {
+    - _plant : IPlant?
+    - _isOwned : bool
+    - _deleteCommand : ICommand?
+    + Plant : IPlant? <<get>> <<set>>
+    + DeleteVisibility : string <<get>>
+    + UserDetailsViewModel(eventAggregator:IEventAggregator, plantStore:IPlantStore, authService:IAuthService)
+    + OnNavigatedTo(navigationContext:NavigationContext) : void
+    + IsNavigationTarget(navigationContext:NavigationContext) : bool
+    + OnNavigatedFrom(navigationContext:NavigationContext) : void
+    - Delete() : void
+}
+BindableBase <|-- UserDetailsViewModel
+INavigationAware <|-- UserDetailsViewModel
+UserDetailsViewModel --> "_eventAggregator" IEventAggregator
+UserDetailsViewModel --> "_plantStore" IPlantStore
+UserDetailsViewModel --> "_authService" IAuthService
+UserDetailsViewModel --> "DeleteCommand" ICommand
+@enduml

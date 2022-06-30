@@ -1,0 +1,10 @@
+@startuml
+class DebugConverter {
+    - {static} _converter : DebugConverter?
+    + <<override>> ProvideValue(serviceProvider:IServiceProvider) : object
+    + Convert(value:object, targetType:Type, parameter:object, culture:CultureInfo) : object
+    + ConvertBack(value:object, targetType:Type, parameter:object, culture:CultureInfo) : object
+}
+MarkupExtension <|-- DebugConverter
+IValueConverter <|-- DebugConverter
+@enduml

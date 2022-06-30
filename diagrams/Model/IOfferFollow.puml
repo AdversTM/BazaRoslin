@@ -1,0 +1,8 @@
+@startuml
+interface IOfferFollow {
+    OfferId : int <<get>> <<set>>
+    UserId : int <<get>> <<set>>
+}
+IDisplayable <|-- IOfferFollow
+IOfferFollow --> "Offer" IOffer
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+class UserDbRepository {
+    + GetUser(login:string) : Task<IUser?>
+}
+class "BaseDbRepository`1"<T> {
+}
+"BaseDbRepository`1" "<UserDbContext>" <|-- UserDbRepository
+IUserStore <|-- UserDbRepository
+@enduml

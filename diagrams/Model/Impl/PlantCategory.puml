@@ -1,0 +1,15 @@
+@startuml
+class PlantCategory {
+    + PlantId : int <<get>> <<set>>
+    + CategoryId : int <<get>> <<set>>
+    + PlantCategory()
+    + PlantCategory(plantId:int, categoryId:int)
+    + PlantCategory(plant:Plant, category:Category)
+    + <<override>> Equals(obj:object?) : bool
+}
+IPlantCategory <|-- PlantCategory
+PlantCategory o-> "Plant" Plant
+PlantCategory o-> "Category" Category
+PlantCategory --> "Plant" IPlant
+PlantCategory --> "Category" ICategory
+@enduml

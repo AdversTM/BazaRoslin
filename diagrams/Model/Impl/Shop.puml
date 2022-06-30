@@ -1,0 +1,10 @@
+@startuml
+class Shop {
+    + Id : int <<get>> <<set>>
+    + Name : string <<get>> <<set>>
+    + Shop(id:int, name:string)
+    + <<override>> Equals(obj:object?) : bool
+    + <<override>> ToString() : string
+}
+IShop <|-- Shop
+@enduml

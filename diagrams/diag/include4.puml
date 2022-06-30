@@ -1,0 +1,129 @@
+﻿@startuml
+interface IUserStore {
+    GetUser(login:string) : Task<IUser?>
+}
+LoginDialogViewModel -u-> "_userStore" IUserStore
+class LoginDialogViewModel {
+    - _login : string = ""
+    - _password : string = ""
+    - _loginCommand : ICommand?
+    + Login : string <<get>> <<set>>
+    + Password : string <<get>> <<set>>
+    + LoginDialogViewModel(userStore:IUserStore, eventAggregator:IEventAggregator)
+    + <<override>> OnDialogOpened(parameters:IDialogParameters) : void
+    + <<override>> OnDialogClosed() : void
+    - <<async>> TryLogin() : void
+    - CloseDialog() : void
+}
+DialogViewModelBase <|-- LoginDialogViewModel
+LoginDialogViewModel --> "_eventAggregator" IEventAggregator
+LoginDialogViewModel --> "_eventSubscription" SubscriptionToken
+LoginDialogViewModel --> "LoginCommand" ICommand
+class DialogViewModelBase {
+    - _iconSource : string?
+    + IconSource : string? <<get>> <<set>>
+    - _title : string?
+    + Title : string? <<get>> <<set>>
+    +  <<event>> RequestClose : Action<IDialogResult>? 
+    + <<virtual>> RaiseRequestClose(dialogResult:IDialogResult) : void
+    + <<virtual>> CanCloseDialog() : bool
+    + <<virtual>> OnDialogClosed() : void
+    + <<virtual>> OnDialogOpened(parameters:IDialogParameters) : void
+}
+BindableBase <|-- DialogViewModelBase
+IDialogAware <|-- DialogViewModelBase
+interface IDialogAware {
+}
+DialogViewModelBase <|-- OfferDialogViewModel
+interface IDisplayable {
+    ToDisplay : string <<get>>
+}
+IDisplayable <|-- IOffer
+IDisplayable <|-- IPlant
+class OfferRating {
+    + OfferId : int <<get>> <<set>>
+    + UserId : int <<get>> <<set>>
+    + Rating : decimal <<get>> <<set>>
+    + OfferRating(offerId:int, userId:int, rating:decimal)
+    + <<override>> Equals(obj:object?) : bool
+}
+IOfferRating <|-u- OfferRating
+interface IPlantStore {
+    GetCategory(id:int) : Task<ICategory?>
+    GetShop(id:int) : Task<IShop?>
+    GetOffers(plantId:int) : Task<List<IOffer>>
+    GetPlants(userId:int) : Task<List<IPlant>>
+    GetCategories() : Task<List<ICategory>>
+    GetShops() : Task<List<IShop>>
+    GetPlants() : Task<List<IPlant>>
+    AddUserPlant(userId:int, plantId:int) : Task
+    DeleteUserPlant(userId:int, plantId:int) : Task
+    GetRating(offerId:int, userId:int) : Task<IOfferRating>
+    SetRating(offerRating:IOfferRating) : Task
+    GetOfferFollows(userId:int) : Task<List<IOfferFollow>>
+    IsFollow(offerId:int, userId:int) : Task<bool>
+    SetFollow(offerId:int, userId:int, isFollow:bool) : Task
+    NewOfferFollow(offerId:int, userId:int) : Task<IOfferFollow>
+}
+class OfferDialogViewModel {
+    - _buyCommand : DelegateCommand?
+    - _rateCommand : ICommand?
+    - _followCommand : ICommand?
+    - _isFollowing : bool
+    - _isBuyable : bool
+    + IsFollowing : bool <<get>> <<set>>
+    + Rating : int <<get>> <<set>>
+    + IsBuyable : bool <<get>> <<set>>
+    + OfferDialogViewModel(eventAggregator:IEventAggregator, plantStore:IPlantStore)
+    + <<override>> OnDialogOpened(parameters:IDialogParameters) : void
+    - Buy() : void
+    - Rate(tag:string) : void
+    - Follow() : void
+}
+OfferDialogViewModel --> "_eventAggregator" IEventAggregator
+OfferDialogViewModel --> "_plantStore" IPlantStore
+OfferDialogViewModel o-u-> "_user" IUser
+OfferDialogViewModel o-u-> "_offer" IOffer
+OfferDialogViewModel o-> "_plant" IPlant
+OfferDialogViewModel o-u-> "_rating" IOfferRating
+OfferDialogViewModel --> "BuyCommand" DelegateCommand
+OfferDialogViewModel --> "RateCommand" ICommand
+OfferDialogViewModel --> "FollowCommand" ICommand
+OfferDialogViewModel --> "Offer" IOffer
+OfferDialogViewModel --> "Plant" IPlant
+interface IOffer {
+    Id : int <<get>> <<set>>
+    PlantId : int <<get>> <<set>>
+    ShopId : int <<get>> <<set>>
+    Availability : int <<get>> <<set>>
+    Price : decimal <<get>> <<set>>
+}
+IOffer --> "Plant" IPlant
+interface IOfferRating {
+    OfferId : int <<get>> <<set>>
+    UserId : int <<get>> <<set>>
+    Rating : decimal <<get>> <<set>>
+}
+interface IPlant {
+    Id : int <<get>> <<set>>
+    Name : string <<get>> <<set>>
+    WateringFrequency : string <<get>> <<set>>
+    Fertilization : string <<get>> <<set>>
+    Size : int <<get>> <<set>>
+    VegetationStart : string <<get>> <<set>>
+    VegetationEnd : string <<get>> <<set>>
+    Insolation : string <<get>> <<set>>
+    Temperature : int <<get>> <<set>>
+    Categories : string <<get>>
+}
+interface IUser {
+    Id : int <<get>> <<set>>
+    Login : string <<get>> <<set>>
+    Password : string <<get>> <<set>>
+    Name : string <<get>> <<set>>
+    Surname : string <<get>> <<set>>
+    CheckPassword(password:string) : bool
+}
+interface ICommand
+interface IEventAggregator
+@enduml

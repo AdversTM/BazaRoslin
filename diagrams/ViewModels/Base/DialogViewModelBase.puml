@@ -1,0 +1,15 @@
+@startuml
+class DialogViewModelBase {
+    - _iconSource : string?
+    + IconSource : string? <<get>> <<set>>
+    - _title : string?
+    + Title : string? <<get>> <<set>>
+    +  <<event>> RequestClose : Action<IDialogResult>? 
+    + <<virtual>> RaiseRequestClose(dialogResult:IDialogResult) : void
+    + <<virtual>> CanCloseDialog() : bool
+    + <<virtual>> OnDialogClosed() : void
+    + <<virtual>> OnDialogOpened(parameters:IDialogParameters) : void
+}
+BindableBase <|-- DialogViewModelBase
+IDialogAware <|-- DialogViewModelBase
+@enduml

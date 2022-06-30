@@ -1,0 +1,22 @@
+﻿@startuml
+class "PubSubEvent"<T> {
+}
+class OfferFollowEvent {
+}
+"PubSubEvent" "<int>" <|-l- OfferFollowEvent
+class OfferUnfollowEvent {
+}
+"PubSubEvent" "<int>" <|-u- OfferUnfollowEvent
+class UserLoggedEvent {
+}
+"PubSubEvent" "<IUser>" <|-u- UserLoggedEvent
+class UserPlantAddEvent {
+}
+"PubSubEvent" "<IPlant>" <|-d- UserPlantAddEvent
+class UserPlantDeleteEvent {
+}
+"PubSubEvent" "<int>" <|-d- UserPlantDeleteEvent
+class UserPreLoginEvent {
+}
+"PubSubEvent" "<LoginArgs>" <|-r- UserPreLoginEvent
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+class Configuration <<static>> {
+    {static} Configuration()
+    + {static} ConnectionString : string <<get>>
+}
+@enduml

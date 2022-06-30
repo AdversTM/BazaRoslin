@@ -1,0 +1,10 @@
+@startuml
+class PriceConverter {
+    - {static} _converter : PriceConverter?
+    + <<override>> ProvideValue(serviceProvider:IServiceProvider) : object
+    + Convert(value:object, targetType:Type, parameter:object, culture:CultureInfo) : object
+    + ConvertBack(value:object, targetType:Type, parameter:object, culture:CultureInfo) : object
+}
+MarkupExtension <|-- PriceConverter
+IValueConverter <|-- PriceConverter
+@enduml

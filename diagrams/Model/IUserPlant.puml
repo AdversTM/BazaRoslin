@@ -1,0 +1,8 @@
+@startuml
+interface IUserPlant {
+    UserId : int <<get>> <<set>>
+    PlantId : int <<get>> <<set>>
+}
+IUserPlant --> "User" IUser
+IUserPlant --> "Plant" IPlant
+@enduml

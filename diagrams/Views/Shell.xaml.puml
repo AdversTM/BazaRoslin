@@ -1,0 +1,5 @@
+@startuml
+class Shell <<partial>> {
+    + Shell()
+}
+@enduml

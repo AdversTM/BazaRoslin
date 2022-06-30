@@ -1,0 +1,426 @@
+@startuml
+class LoginArgs {
+    + LoginArgs(user:IUser, phase:LoginPhase)
+}
+enum LoginPhase {
+    Request,
+    Response,
+    Success,
+}
+LoginArgs --> "User" IUser
+LoginArgs --> "Phase" LoginPhase
+interface ICategory {
+    Id : int <<get>> <<set>>
+    Name : string <<get>> <<set>>
+}
+class "List`1"<T> {
+}
+ICategory --> "PlantCategories<IPlantCategory>" "List`1"
+interface IDisplayable {
+    ToDisplay : string <<get>>
+}
+interface IOffer {
+    Id : int <<get>> <<set>>
+    PlantId : int <<get>> <<set>>
+    ShopId : int <<get>> <<set>>
+    Availability : int <<get>> <<set>>
+    Price : decimal <<get>> <<set>>
+}
+class "IComparable`1"<T> {
+}
+IDisplayable <|-- IOffer
+"IComparable`1" "<IOffer>" <|-- IOffer
+IOffer --> "Plant" IPlant
+IOffer --> "Shop" IShop
+interface IOfferFollow {
+    OfferId : int <<get>> <<set>>
+    UserId : int <<get>> <<set>>
+}
+IDisplayable <|-- IOfferFollow
+IOfferFollow --> "Offer" IOffer
+interface IOfferRating {
+    OfferId : int <<get>> <<set>>
+    UserId : int <<get>> <<set>>
+    Rating : decimal <<get>> <<set>>
+}
+interface IPlant {
+    Id : int <<get>> <<set>>
+    Name : string <<get>> <<set>>
+    WateringFrequency : string <<get>> <<set>>
+    Fertilization : string <<get>> <<set>>
+    Size : int <<get>> <<set>>
+    VegetationStart : string <<get>> <<set>>
+    VegetationEnd : string <<get>> <<set>>
+    Insolation : string <<get>> <<set>>
+    Temperature : int <<get>> <<set>>
+    Categories : string <<get>>
+}
+class "List`1"<T> {
+}
+IDisplayable <|-- IPlant
+IPlant --> "PlantCategories<IPlantCategory>" "List`1"
+IPlant --> "CategoriesList<string>" "List`1"
+interface IPlantCategory {
+    PlantId : int <<get>> <<set>>
+    CategoryId : int <<get>> <<set>>
+}
+IPlantCategory --> "Plant" IPlant
+IPlantCategory --> "Category" ICategory
+interface IShop {
+    Id : int <<get>> <<set>>
+    Name : string <<get>> <<set>>
+}
+interface IUser {
+    Id : int <<get>> <<set>>
+    Login : string <<get>> <<set>>
+    Password : string <<get>> <<set>>
+    Name : string <<get>> <<set>>
+    Surname : string <<get>> <<set>>
+    CheckPassword(password:string) : bool
+}
+interface IUserPlant {
+    UserId : int <<get>> <<set>>
+    PlantId : int <<get>> <<set>>
+}
+IUserPlant --> "User" IUser
+IUserPlant --> "Plant" IPlant
+interface IAuthService {
+    + CurrentUser : IUser? <<get>>
+    + IsLogged : bool <<get>>
+}
+IAuthService --> "LoggedUser" IUser
+interface IPlantStore {
+    GetCategory(id:int) : Task<ICategory?>
+    GetShop(id:int) : Task<IShop?>
+    GetOffers(plantId:int) : Task<List<IOffer>>
+    GetPlants(userId:int) : Task<List<IPlant>>
+    GetCategories() : Task<List<ICategory>>
+    GetShops() : Task<List<IShop>>
+    GetPlants() : Task<List<IPlant>>
+    AddUserPlant(userId:int, plantId:int) : Task
+    DeleteUserPlant(userId:int, plantId:int) : Task
+    GetRating(offerId:int, userId:int) : Task<IOfferRating>
+    SetRating(offerRating:IOfferRating) : Task
+    GetOfferFollows(userId:int) : Task<List<IOfferFollow>>
+    IsFollow(offerId:int, userId:int) : Task<bool>
+    SetFollow(offerId:int, userId:int, isFollow:bool) : Task
+    NewOfferFollow(offerId:int, userId:int) : Task<IOfferFollow>
+}
+interface IUserStore {
+    GetUser(login:string) : Task<IUser?>
+}
+class CatalogViewModel {
+    - _selectedCommand : ICommand?
+    - _filterText : string = ""
+    + FilterText : string <<get>> <<set>>
+    + CatalogViewModel(plantStore:IPlantStore, regionManager:IRegionManager)
+    - <<async>> LoadPlants() : void
+    - FilterPlants() : void
+    - NavigateDetails(args:SelectionChangedEventArgs) : void
+    # <<override>> OnPropertyChanged(args:PropertyChangedEventArgs) : void
+}
+class "List`1"<T> {
+}
+BindableBase <|-- CatalogViewModel
+CatalogViewModel --> "_plantStore" IPlantStore
+CatalogViewModel --> "_regionManager" IRegionManager
+CatalogViewModel o-> "_plants<IPlant>" "List`1"
+CatalogViewModel o-> "_filteredPlants" ICollectionView
+CatalogViewModel --> "FilteredPlants" ICollectionView
+CatalogViewModel --> "SelectedCommand" ICommand
+class DetailsViewModel {
+    - _plant : IPlant?
+    + Plant : IPlant? <<get>> <<set>>
+    + OnNavigatedTo(navigationContext:NavigationContext) : void
+    + IsNavigationTarget(navigationContext:NavigationContext) : bool
+    + OnNavigatedFrom(navigationContext:NavigationContext) : void
+}
+BindableBase <|-- DetailsViewModel
+INavigationAware <|-- DetailsViewModel
+class LoginDialogViewModel {
+    - _login : string = ""
+    - _password : string = ""
+    - _loginCommand : ICommand?
+    + Login : string <<get>> <<set>>
+    + Password : string <<get>> <<set>>
+    + LoginDialogViewModel(userStore:IUserStore, eventAggregator:IEventAggregator)
+    + <<override>> OnDialogOpened(parameters:IDialogParameters) : void
+    + <<override>> OnDialogClosed() : void
+    - <<async>> TryLogin() : void
+    - CloseDialog() : void
+}
+DialogViewModelBase <|-- LoginDialogViewModel
+LoginDialogViewModel --> "_userStore" IUserStore
+LoginDialogViewModel --> "_eventAggregator" IEventAggregator
+LoginDialogViewModel --> "_eventSubscription" SubscriptionToken
+LoginDialogViewModel --> "LoginCommand" ICommand
+class OfferDialogViewModel {
+    - _buyCommand : DelegateCommand?
+    - _rateCommand : ICommand?
+    - _followCommand : ICommand?
+    - _isFollowing : bool
+    - _isBuyable : bool
+    + IsFollowing : bool <<get>> <<set>>
+    + Rating : int <<get>> <<set>>
+    + IsBuyable : bool <<get>> <<set>>
+    + OfferDialogViewModel(eventAggregator:IEventAggregator, plantStore:IPlantStore)
+    + <<override>> OnDialogOpened(parameters:IDialogParameters) : void
+    - Buy() : void
+    - Rate(tag:string) : void
+    - Follow() : void
+}
+DialogViewModelBase <|-- OfferDialogViewModel
+OfferDialogViewModel --> "_eventAggregator" IEventAggregator
+OfferDialogViewModel --> "_plantStore" IPlantStore
+OfferDialogViewModel o-> "_user" IUser
+OfferDialogViewModel o-> "_offer" IOffer
+OfferDialogViewModel o-> "_plant" IPlant
+OfferDialogViewModel o-> "_rating" IOfferRating
+OfferDialogViewModel --> "BuyCommand" DelegateCommand
+OfferDialogViewModel --> "RateCommand" ICommand
+OfferDialogViewModel --> "FollowCommand" ICommand
+OfferDialogViewModel --> "Offer" IOffer
+OfferDialogViewModel --> "Plant" IPlant
+class OffersViewModel {
+    - _offerCommand : ICommand?
+    + OffersViewModel(plantStore:IPlantStore, dialogService:IDialogService, eventAggregator:IEventAggregator, authService:IAuthService)
+    + <<async>> OnNavigatedTo(navigationContext:NavigationContext) : void
+    + IsNavigationTarget(navigationContext:NavigationContext) : bool
+    + OnNavigatedFrom(navigationContext:NavigationContext) : void
+    - <<async>> OpenOffer(arg:object) : void
+}
+class "ObservableCollection`1"<T> {
+}
+class "HashSet`1"<T> {
+}
+BindableBase <|-- OffersViewModel
+INavigationAware <|-- OffersViewModel
+OffersViewModel --> "_plantStore" IPlantStore
+OffersViewModel --> "_dialogService" IDialogService
+OffersViewModel --> "_authService" IAuthService
+OffersViewModel o-> "_plant" IPlant
+OffersViewModel o-> "_offers<IOffer>" "ObservableCollection`1"
+OffersViewModel o-> "_userPlants<int>" "HashSet`1"
+OffersViewModel --> "Offers<IOffer>" "ObservableCollection`1"
+OffersViewModel --> "OfferCommand" ICommand
+class ShellViewModel {
+    + ShellViewModel(dialogService:IDialogService, regionManager:IRegionManager, authService:IAuthService)
+}
+BindableBase <|-- ShellViewModel
+class UserDetailsViewModel {
+    - _plant : IPlant?
+    - _isOwned : bool
+    - _deleteCommand : ICommand?
+    + Plant : IPlant? <<get>> <<set>>
+    + DeleteVisibility : string <<get>>
+    + UserDetailsViewModel(eventAggregator:IEventAggregator, plantStore:IPlantStore, authService:IAuthService)
+    + OnNavigatedTo(navigationContext:NavigationContext) : void
+    + IsNavigationTarget(navigationContext:NavigationContext) : bool
+    + OnNavigatedFrom(navigationContext:NavigationContext) : void
+    - Delete() : void
+}
+BindableBase <|-- UserDetailsViewModel
+INavigationAware <|-- UserDetailsViewModel
+UserDetailsViewModel --> "_eventAggregator" IEventAggregator
+UserDetailsViewModel --> "_plantStore" IPlantStore
+UserDetailsViewModel --> "_authService" IAuthService
+UserDetailsViewModel --> "DeleteCommand" ICommand
+class UserViewModel {
+    - _selectedOwnedCommand : ICommand?
+    - _selectedFollowingCommand : ICommand?
+    - _offerCommand : ICommand?
+    - _selectedPlant : IPlant?
+    - _selectedFollow : IOfferFollow?
+    - _filterText : string = ""
+    - _isOwnedDetails : bool
+    + User : IUser? <<get>>
+    + FilterText : string <<get>> <<set>>
+    + SelectedPlant : IPlant? <<get>> <<set>>
+    + SelectedFollow : IOfferFollow? <<get>> <<set>>
+    + UserViewModel(eventAggregator:IEventAggregator, plantStore:IPlantStore, regionManager:IRegionManager, authService:IAuthService, dialogService:IDialogService)
+    - <<async>> LoadPlants() : void
+    - FilterPlants() : void
+    - <<async>> AddFollow(offerId:int) : Task
+    - NavigateDetails(args:SelectionChangedEventArgs, isOwned:bool) : void
+    # <<override>> OnPropertyChanged(args:PropertyChangedEventArgs) : void
+    - <<async>> OpenOffer(arg:object) : void
+}
+class "ObservableCollection`1"<T> {
+}
+BindableBase <|-- UserViewModel
+UserViewModel --> "_plantStore" IPlantStore
+UserViewModel --> "_regionManager" IRegionManager
+UserViewModel --> "_authService" IAuthService
+UserViewModel --> "_dialogService" IDialogService
+UserViewModel o-> "_plants<IPlant>" "ObservableCollection`1"
+UserViewModel o-> "_offerFollows<IOfferFollow>" "ObservableCollection`1"
+UserViewModel o-> "_filteredPlants" ICollectionView
+UserViewModel --> "OfferFollows<IOfferFollow>" "ObservableCollection`1"
+UserViewModel --> "FilteredPlants" ICollectionView
+UserViewModel --> "SelectedOwnedCommand" ICommand
+UserViewModel --> "SelectedFollowingCommand" ICommand
+UserViewModel --> "OfferCommand" ICommand
+class Category {
+    + Id : int <<get>> <<set>>
+    + Name : string <<get>> <<set>>
+    + Category(id:int, name:string)
+    + <<override>> Equals(obj:object?) : bool
+    + <<override>> ToString() : string
+}
+class "List`1"<T> {
+}
+ICategory <|-- Category
+Category o-> "PlantCategories<PlantCategory>" "List`1"
+Category --> "PlantCategories<IPlantCategory>" "List`1"
+class Offer {
+    + Id : int <<get>> <<set>>
+    + PlantId : int <<get>> <<set>>
+    + ShopId : int <<get>> <<set>>
+    + Availability : int <<get>> <<set>>
+    + Price : decimal <<get>> <<set>>
+    + ToDisplay : string <<get>>
+    + Offer(id:int, plantId:int, shopId:int, availability:int, price:decimal)
+    + <<override>> Equals(obj:object?) : bool
+    + CompareTo(other:IOffer) : int
+}
+IOffer <|-- Offer
+Offer o-> "Plant" Plant
+Offer o-> "Shop" Shop
+Offer --> "Plant" IPlant
+Offer --> "Shop" IShop
+class OfferFollow {
+    + OfferId : int <<get>> <<set>>
+    + UserId : int <<get>> <<set>>
+    + ToDisplay : string <<get>>
+    + OfferFollow(offerId:int, userId:int)
+    + <<override>> Equals(obj:object?) : bool
+}
+IOfferFollow <|-- OfferFollow
+OfferFollow o-> "Offer" Offer
+OfferFollow --> "Offer" IOffer
+class OfferRating {
+    + OfferId : int <<get>> <<set>>
+    + UserId : int <<get>> <<set>>
+    + Rating : decimal <<get>> <<set>>
+    + OfferRating(offerId:int, userId:int, rating:decimal)
+    + <<override>> Equals(obj:object?) : bool
+}
+IOfferRating <|-- OfferRating
+class Plant {
+    + Id : int <<get>> <<set>>
+    + Name : string <<get>> <<set>>
+    + WateringFrequency : string <<get>> <<set>>
+    + Fertilization : string <<get>> <<set>>
+    + Size : int <<get>> <<set>>
+    + VegetationStart : string <<get>> <<set>>
+    + VegetationEnd : string <<get>> <<set>>
+    + Insolation : string <<get>> <<set>>
+    + Temperature : int <<get>> <<set>>
+    + Categories : string <<get>>
+    + ToDisplay : string <<get>>
+    + Plant(id:int, name:string, image:byte[], wateringFrequency:string, fertilization:string, size:int, vegetationStart:string, vegetationEnd:string, insolation:string, temperature:int)
+    + <<override>> Equals(obj:object?) : bool
+    + <<override>> ToString() : string
+}
+class "List`1"<T> {
+}
+IPlant <|-- Plant
+Plant o-> "PlantCategories<PlantCategory>" "List`1"
+Plant --> "CategoriesList<string>" "List`1"
+Plant --> "PlantCategories<IPlantCategory>" "List`1"
+class PlantCategory {
+    + PlantId : int <<get>> <<set>>
+    + CategoryId : int <<get>> <<set>>
+    + PlantCategory()
+    + PlantCategory(plantId:int, categoryId:int)
+    + PlantCategory(plant:Plant, category:Category)
+    + <<override>> Equals(obj:object?) : bool
+}
+IPlantCategory <|-- PlantCategory
+PlantCategory o-> "Plant" Plant
+PlantCategory o-> "Category" Category
+PlantCategory --> "Plant" IPlant
+PlantCategory --> "Category" ICategory
+class Shop {
+    + Id : int <<get>> <<set>>
+    + Name : string <<get>> <<set>>
+    + Shop(id:int, name:string)
+    + <<override>> Equals(obj:object?) : bool
+    + <<override>> ToString() : string
+}
+IShop <|-- Shop
+class User {
+    + Id : int <<get>> <<set>>
+    + Login : string <<get>> <<set>>
+    + Password : string <<get>> <<set>>
+    + Name : string <<get>> <<set>>
+    + Surname : string <<get>> <<set>>
+    + User(id:int, login:string, password:string, name:string, surname:string)
+    + CheckPassword(password:string) : bool
+    + <<override>> Equals(obj:object?) : bool
+    + <<override>> ToString() : string
+}
+IUser <|-- User
+class UserPlant {
+    + UserId : int <<get>> <<set>>
+    + PlantId : int <<get>> <<set>>
+    + UserPlant(userId:int, plantId:int)
+    + UserPlant(user:User, plant:Plant)
+    + <<override>> Equals(obj:object?) : bool
+}
+IUserPlant <|-- UserPlant
+UserPlant o-> "User" User
+UserPlant o-> "Plant" Plant
+UserPlant --> "User" IUser
+UserPlant --> "Plant" IPlant
+class AuthService {
+    + CurrentUser : IUser? <<get>>
+    + IsLogged : bool <<get>>
+    + AuthService(eventAggregator:IEventAggregator)
+}
+IAuthService <|-- AuthService
+AuthService --> "LoggedUser" IUser
+class MockPlantStore {
+    + MockPlantStore()
+    - <<async>> Load() : void
+    + GetCategory(id:int) : Task<ICategory?>
+    + GetShop(id:int) : Task<IShop?>
+    + GetOffers(plantId:int) : Task<List<IOffer>>
+    + GetPlants(userId:int) : Task<List<IPlant>>
+    + GetCategories() : Task<List<ICategory>>
+    + GetShops() : Task<List<IShop>>
+    + GetPlants() : Task<List<IPlant>>
+    + AddUserPlant(userId:int, plantId:int) : Task
+    + DeleteUserPlant(userId:int, plantId:int) : Task
+    + GetRating(offerId:int, userId:int) : Task<IOfferRating>
+    + SetRating(offerRating:IOfferRating) : Task
+    + GetOfferFollows(userId:int) : Task<List<IOfferFollow>>
+    + IsFollow(offerId:int, userId:int) : Task<bool>
+    + SetFollow(offerId:int, userId:int, isFollow:bool) : Task
+    + NewOfferFollow(offerId:int, userId:int) : Task<IOfferFollow>
+}
+class "List`1"<T> {
+}
+IPlantStore <|-- MockPlantStore
+MockPlantStore o-> "_categories<ICategory>" "List`1"
+MockPlantStore o-> "_shops<IShop>" "List`1"
+MockPlantStore --> "_plants<IPlant>" "List`1"
+MockPlantStore o-> "_offers<IOffer>" "List`1"
+class MockUserStore {
+    + GetUser(login:string) : Task<IUser?>
+}
+IUserStore <|-- MockUserStore
+class DialogViewModelBase {
+    - _iconSource : string?
+    + IconSource : string? <<get>> <<set>>
+    - _title : string?
+    + Title : string? <<get>> <<set>>
+    +  <<event>> RequestClose : Action<IDialogResult>? 
+    + <<virtual>> RaiseRequestClose(dialogResult:IDialogResult) : void
+    + <<virtual>> CanCloseDialog() : bool
+    + <<virtual>> OnDialogClosed() : void
+    + <<virtual>> OnDialogOpened(parameters:IDialogParameters) : void
+}
+BindableBase <|-- DialogViewModelBase
+IDialogAware <|-- DialogViewModelBase
+@enduml

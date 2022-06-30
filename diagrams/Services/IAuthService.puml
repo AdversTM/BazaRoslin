@@ -1,0 +1,7 @@
+@startuml
+interface IAuthService {
+    + CurrentUser : IUser? <<get>>
+    + IsLogged : bool <<get>>
+}
+IAuthService --> "LoggedUser" IUser
+@enduml

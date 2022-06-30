@@ -1,0 +1,9 @@
+@startuml
+interface ICategory {
+    Id : int <<get>> <<set>>
+    Name : string <<get>> <<set>>
+}
+class "List`1"<T> {
+}
+ICategory --> "PlantCategories<IPlantCategory>" "List`1"
+@enduml

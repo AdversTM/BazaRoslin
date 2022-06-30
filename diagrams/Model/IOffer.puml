@@ -1,0 +1,15 @@
+@startuml
+interface IOffer {
+    Id : int <<get>> <<set>>
+    PlantId : int <<get>> <<set>>
+    ShopId : int <<get>> <<set>>
+    Availability : int <<get>> <<set>>
+    Price : decimal <<get>> <<set>>
+}
+class "IComparable`1"<T> {
+}
+IDisplayable <|-- IOffer
+"IComparable`1" "<IOffer>" <|-- IOffer
+IOffer --> "Plant" IPlant
+IOffer --> "Shop" IShop
+@enduml

@@ -1,0 +1,12 @@
+@startuml
+class OfferFollow {
+    + OfferId : int <<get>> <<set>>
+    + UserId : int <<get>> <<set>>
+    + ToDisplay : string <<get>>
+    + OfferFollow(offerId:int, userId:int)
+    + <<override>> Equals(obj:object?) : bool
+}
+IOfferFollow <|-- OfferFollow
+OfferFollow o-> "Offer" Offer
+OfferFollow --> "Offer" IOffer
+@enduml

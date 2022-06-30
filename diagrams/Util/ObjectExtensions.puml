@@ -1,0 +1,6 @@
+@startuml
+class ObjectExtensions <<static>> {
+    + {static} Let(self:T, block:Func<T, R>) : R
+    + {static} Also(self:T, block:Action<T>) : T
+}
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+interface IUser {
+    Id : int <<get>> <<set>>
+    Login : string <<get>> <<set>>
+    Password : string <<get>> <<set>>
+    Name : string <<get>> <<set>>
+    Surname : string <<get>> <<set>>
+    CheckPassword(password:string) : bool
+}
+@enduml

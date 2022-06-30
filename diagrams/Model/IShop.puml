@@ -1,0 +1,6 @@
+@startuml
+interface IShop {
+    Id : int <<get>> <<set>>
+    Name : string <<get>> <<set>>
+}
+@enduml

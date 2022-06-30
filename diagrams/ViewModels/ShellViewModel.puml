@@ -1,0 +1,6 @@
+@startuml
+class ShellViewModel {
+    + ShellViewModel(dialogService:IDialogService, regionManager:IRegionManager, authService:IAuthService)
+}
+BindableBase <|-- ShellViewModel
+@enduml

@@ -1,0 +1,89 @@
+﻿@startuml
+interface IPlantStore {
+    GetCategory(id:int) : Task<ICategory?>
+    GetShop(id:int) : Task<IShop?>
+    GetOffers(plantId:int) : Task<List<IOffer>>
+    GetPlants(userId:int) : Task<List<IPlant>>
+    GetCategories() : Task<List<ICategory>>
+    GetShops() : Task<List<IShop>>
+    GetPlants() : Task<List<IPlant>>
+    AddUserPlant(userId:int, plantId:int) : Task
+    DeleteUserPlant(userId:int, plantId:int) : Task
+    GetRating(offerId:int, userId:int) : Task<IOfferRating>
+    SetRating(offerRating:IOfferRating) : Task
+    GetOfferFollows(userId:int) : Task<List<IOfferFollow>>
+    IsFollow(offerId:int, userId:int) : Task<bool>
+    SetFollow(offerId:int, userId:int, isFollow:bool) : Task
+    NewOfferFollow(offerId:int, userId:int) : Task<IOfferFollow>
+}
+interface IUserStore {
+    GetUser(login:string) : Task<IUser?>
+}
+abstract class "BaseDbRepository"<TContext> {
+    # Context : TContext <<get>>
+    # UseContext(func:Func<TContext, T>) : Task<T>
+    # UseContext(action:Action<TContext>) : Task
+}
+class PlantDbRepository {
+    + GetCategory(id:int) : Task<ICategory?>
+    + GetShop(id:int) : Task<IShop?>
+    + GetOffers(plantId:int) : Task<List<IOffer>>
+    + GetPlants(userId:int) : Task<List<IPlant>>
+    + GetCategories() : Task<List<ICategory>>
+    + GetPlantCategories() : Task<List<IPlantCategory>>
+    + GetShops() : Task<List<IShop>>
+    + GetPlants() : Task<List<IPlant>>
+    + AddUserPlant(userId:int, plantId:int) : Task
+    + DeleteUserPlant(userId:int, plantId:int) : Task
+    + <<async>> GetRating(offerId:int, userId:int) : Task<IOfferRating>
+    + SetRating(offerRating:IOfferRating) : Task
+    + GetOfferFollows(userId:int) : Task<List<IOfferFollow>>
+    + IsFollow(offerId:int, userId:int) : Task<bool>
+    + SetFollow(offerId:int, userId:int, isFollow:bool) : Task
+    + NewOfferFollow(offerId:int, userId:int) : Task<IOfferFollow>
+}
+"BaseDbRepository" "<PlantDbContext>" <|-u- PlantDbRepository
+IPlantStore <|-- PlantDbRepository
+class UserDbRepository {
+    + GetUser(login:string) : Task<IUser?>
+}
+"BaseDbRepository" "<UserDbContext>" <|-- UserDbRepository
+IUserStore <|-u- UserDbRepository
+
+
+abstract class BaseDbContext {
+    + {static} Current() : BaseDbContext
+    - <<readonly>> _connectionString : string
+    # BaseDbContext(connectionString:string)
+    # <<override>> OnConfiguring(options:DbContextOptionsBuilder) : void
+}
+DbContext <|-u- BaseDbContext
+class PlantDbContext {
+    - {static} _current : PlantDbContext?
+    # <<new>> {static} Current() : PlantDbContext
+    + PlantDbContext(connectionString:string)
+    # <<override>> OnModelCreating(modelBuilder:ModelBuilder) : void
+}
+class "DbSet"<T> {
+}
+BaseDbContext <|-- PlantDbContext
+PlantDbContext o-d-> "Categories<Category>" "DbSet"
+PlantDbContext o-d-> "Shops<Shop>" "DbSet"
+PlantDbContext o-d-> "Plants<Plant>" "DbSet"
+PlantDbContext o-d-> "Offers<Offer>" "DbSet"
+PlantDbContext o-d-> "PlantCategories<PlantCategory>" "DbSet"
+PlantDbContext o-d-> "UserPlants<UserPlant>" "DbSet"
+PlantDbContext o-d-> "OfferRatings<OfferRating>" "DbSet"
+PlantDbContext o-d-> "OfferFollows<OfferFollow>" "DbSet"
+class UserDbContext {
+    - {static} _current : UserDbContext?
+    # <<new>> {static} Current() : UserDbContext
+    + UserDbContext(connectionString:string)
+    # <<override>> OnModelCreating(modelBuilder:ModelBuilder) : void
+}
+BaseDbContext <|-- UserDbContext
+UserDbContext o-u-> "Users<User>" "DbSet"
+
+PlantDbRepository o-> "Context" "PlantDbContext"
+UserDbRepository o-> "Context" "UserDbContext"
+@enduml

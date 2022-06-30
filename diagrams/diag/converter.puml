@@ -1,0 +1,44 @@
+﻿@startuml
+class Base64ToImageConverter {
+    - {static} _converter : Base64ToImageConverter?
+    + <<override>> ProvideValue(serviceProvider:IServiceProvider) : object
+    + Convert(value:object, Type, parameter:object, CultureInfo) : object
+    + ConvertBack(value:object, Type, parameter:object, CultureInfo) : object
+}
+MarkupExtension <|-r- Base64ToImageConverter
+IValueConverter <|-r- Base64ToImageConverter
+class BytesToImageConverter {
+    - {static} _converter : BytesToImageConverter?
+    + <<override>> ProvideValue(serviceProvider:IServiceProvider) : object
+    + Convert(value:object, Type, parameter:object, CultureInfo) : object
+    + ConvertBack(value:object, Type, parameter:object, CultureInfo) : object
+}
+MarkupExtension <|-d- BytesToImageConverter
+IValueConverter <|-d- BytesToImageConverter
+class DebugConverter {
+    - {static} _converter : DebugConverter?
+    + <<override>> ProvideValue(serviceProvider:IServiceProvider) : object
+    + Convert(value:object, Type, parameter:object, CultureInfo) : object
+    + ConvertBack(value:object, Type, parameter:object, CultureInfo) : object
+}
+MarkupExtension <|-u- DebugConverter
+IValueConverter <|-u- DebugConverter
+class PriceConverter {
+    - {static} _converter : PriceConverter?
+    + <<override>> ProvideValue(serviceProvider:IServiceProvider) : object
+    + Convert(value:object, Type, parameter:object, CultureInfo) : object
+    + ConvertBack(value:object, Type, parameter:object, CultureInfo) : object
+}
+MarkupExtension <|-l- PriceConverter
+IValueConverter <|-l- PriceConverter
+class ToStringConverter {
+    - {static} _converter : ToStringConverter?
+    + <<override>> ProvideValue(serviceProvider:IServiceProvider) : object
+    + Convert(value:object, Type, parameter:object, CultureInfo) : object
+    + ConvertBack(value:object, Type, parameter:object, CultureInfo) : object
+}
+MarkupExtension <|-d- ToStringConverter
+IValueConverter <|-d- ToStringConverter
+interface IValueConverter
+abstract class MarkupExtension
+@enduml

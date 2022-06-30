@@ -1,0 +1,11 @@
+@startuml
+class Image <<static>> {
+    + {static} GetBytes(path:string) : byte[]
+    + {static} ToBase64(path:string) : string
+    + {static} ToImage(bytes:byte[]) : SDImage
+    + {static} ToImage(base64:string) : SDImage
+    + {static} ToImageSource(bytes:byte[]) : ImageSource
+    + {static} ToImageSource(base64:string) : ImageSource
+    + {static} ToImageSource(image:SDImage) : ImageSource
+}
+@enduml

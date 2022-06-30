@@ -1,0 +1,5 @@
+@startuml
+interface IUserStore {
+    GetUser(login:string) : Task<IUser?>
+}
+@enduml

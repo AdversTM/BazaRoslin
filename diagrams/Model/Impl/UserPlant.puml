@@ -1,0 +1,14 @@
+@startuml
+class UserPlant {
+    + UserId : int <<get>> <<set>>
+    + PlantId : int <<get>> <<set>>
+    + UserPlant(userId:int, plantId:int)
+    + UserPlant(user:User, plant:Plant)
+    + <<override>> Equals(obj:object?) : bool
+}
+IUserPlant <|-- UserPlant
+UserPlant o-> "User" User
+UserPlant o-> "Plant" Plant
+UserPlant --> "User" IUser
+UserPlant --> "Plant" IPlant
+@enduml

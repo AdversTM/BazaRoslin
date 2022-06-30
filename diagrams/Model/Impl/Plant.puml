@@ -1,0 +1,24 @@
+@startuml
+class Plant {
+    + Id : int <<get>> <<set>>
+    + Name : string <<get>> <<set>>
+    + WateringFrequency : string <<get>> <<set>>
+    + Fertilization : string <<get>> <<set>>
+    + Size : int <<get>> <<set>>
+    + VegetationStart : string <<get>> <<set>>
+    + VegetationEnd : string <<get>> <<set>>
+    + Insolation : string <<get>> <<set>>
+    + Temperature : int <<get>> <<set>>
+    + Categories : string <<get>>
+    + ToDisplay : string <<get>>
+    + Plant(id:int, name:string, image:byte[], wateringFrequency:string, fertilization:string, size:int, vegetationStart:string, vegetationEnd:string, insolation:string, temperature:int)
+    + <<override>> Equals(obj:object?) : bool
+    + <<override>> ToString() : string
+}
+class "List`1"<T> {
+}
+IPlant <|-- Plant
+Plant o-> "PlantCategories<PlantCategory>" "List`1"
+Plant --> "CategoriesList<string>" "List`1"
+Plant --> "PlantCategories<IPlantCategory>" "List`1"
+@enduml

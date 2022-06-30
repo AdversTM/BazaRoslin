@@ -1,0 +1,5 @@
+@startuml
+class Hash <<static>> {
+    + {static} CreateMD5(text:string) : string
+}
+@enduml

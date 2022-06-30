@@ -1,0 +1,28 @@
+@startuml
+class MockPlantStore {
+    + MockPlantStore()
+    - <<async>> Load() : void
+    + GetCategory(id:int) : Task<ICategory?>
+    + GetShop(id:int) : Task<IShop?>
+    + GetOffers(plantId:int) : Task<List<IOffer>>
+    + GetPlants(userId:int) : Task<List<IPlant>>
+    + GetCategories() : Task<List<ICategory>>
+    + GetShops() : Task<List<IShop>>
+    + GetPlants() : Task<List<IPlant>>
+    + AddUserPlant(userId:int, plantId:int) : Task
+    + DeleteUserPlant(userId:int, plantId:int) : Task
+    + GetRating(offerId:int, userId:int) : Task<IOfferRating>
+    + SetRating(offerRating:IOfferRating) : Task
+    + GetOfferFollows(userId:int) : Task<List<IOfferFollow>>
+    + IsFollow(offerId:int, userId:int) : Task<bool>
+    + SetFollow(offerId:int, userId:int, isFollow:bool) : Task
+    + NewOfferFollow(offerId:int, userId:int) : Task<IOfferFollow>
+}
+class "List`1"<T> {
+}
+IPlantStore <|-- MockPlantStore
+MockPlantStore o-> "_categories<ICategory>" "List`1"
+MockPlantStore o-> "_shops<IShop>" "List`1"
+MockPlantStore --> "_plants<IPlant>" "List`1"
+MockPlantStore o-> "_offers<IOffer>" "List`1"
+@enduml

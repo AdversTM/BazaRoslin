@@ -1,0 +1,24 @@
+@startuml
+class PlantDbRepository {
+    + GetCategory(id:int) : Task<ICategory?>
+    + GetShop(id:int) : Task<IShop?>
+    + GetOffers(plantId:int) : Task<List<IOffer>>
+    + GetPlants(userId:int) : Task<List<IPlant>>
+    + GetCategories() : Task<List<ICategory>>
+    + GetPlantCategories() : Task<List<IPlantCategory>>
+    + GetShops() : Task<List<IShop>>
+    + GetPlants() : Task<List<IPlant>>
+    + AddUserPlant(userId:int, plantId:int) : Task
+    + DeleteUserPlant(userId:int, plantId:int) : Task
+    + <<async>> GetRating(offerId:int, userId:int) : Task<IOfferRating>
+    + SetRating(offerRating:IOfferRating) : Task
+    + GetOfferFollows(userId:int) : Task<List<IOfferFollow>>
+    + IsFollow(offerId:int, userId:int) : Task<bool>
+    + SetFollow(offerId:int, userId:int, isFollow:bool) : Task
+    + NewOfferFollow(offerId:int, userId:int) : Task<IOfferFollow>
+}
+class "BaseDbRepository`1"<T> {
+}
+"BaseDbRepository`1" "<PlantDbContext>" <|-- PlantDbRepository
+IPlantStore <|-- PlantDbRepository
+@enduml

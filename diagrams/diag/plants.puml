@@ -1,0 +1,168 @@
+﻿@startuml
+IOfferFollow <|-- OfferFollow
+class OfferFollow {
+    + OfferId : int <<get>> <<set>>
+    + UserId : int <<get>> <<set>>
+    + ToDisplay : string <<get>>
+    + OfferFollow(offerId:int, userId:int)
+    + <<override>> Equals(obj:object?) : bool
+}
+OfferFollow o-> "Offer" Offer
+OfferFollow --> "Offer" IOffer
+class Category {
+    + Id : int <<get>> <<set>>
+    + Name : string <<get>> <<set>>
+    + Category(id:int, name:string)
+    + <<override>> Equals(obj:object?) : bool
+    + <<override>> ToString() : string
+}
+ICategory <|-l- Category
+Category o-> "PlantCategories<PlantCategory>" "List"
+Category --> "PlantCategories<IPlantCategory>" "List"
+class PlantCategory {
+    + PlantId : int <<get>> <<set>>
+    + CategoryId : int <<get>> <<set>>
+    + PlantCategory()
+    + PlantCategory(plantId:int, categoryId:int)
+    + PlantCategory(plant:Plant, category:Category)
+    + <<override>> Equals(obj:object?) : bool
+}
+IPlantCategory <|-- PlantCategory
+PlantCategory o-> "Plant" Plant
+PlantCategory o-> "Category" Category
+PlantCategory --> "Plant" IPlant
+PlantCategory --> "Category" ICategory
+class Shop {
+    + Id : int <<get>> <<set>>
+    + Name : string <<get>> <<set>>
+    + Shop(id:int, name:string)
+    + <<override>> Equals(obj:object?) : bool
+    + <<override>> ToString() : string
+}
+IShop <|-- Shop
+interface IShop {
+    Id : int <<get>> <<set>>
+    Name : string <<get>> <<set>>
+}
+IOffer --> "Shop" IShop
+class Offer {
+    + Id : int <<get>> <<set>>
+    + PlantId : int <<get>> <<set>>
+    + ShopId : int <<get>> <<set>>
+    + Availability : int <<get>> <<set>>
+    + Price : decimal <<get>> <<set>>
+    + ToDisplay : string <<get>>
+    + Offer(id:int, plantId:int, shopId:int, availability:int, price:decimal)
+    + <<override>> Equals(obj:object?) : bool
+    + CompareTo(other:IOffer) : int
+}
+interface "IComparable"<T> {
+}
+"IComparable" "<IOffer>" <|-- IOffer
+IOffer <|-- Offer
+interface IOffer {
+    Id : int <<get>> <<set>>
+    PlantId : int <<get>> <<set>>
+    ShopId : int <<get>> <<set>>
+    Availability : int <<get>> <<set>>
+    Price : decimal <<get>> <<set>>
+}
+Offer o-> "Plant" Plant
+Offer o-> "Shop" Shop
+Offer --> "Plant" IPlant
+Offer --> "Shop" IShop
+interface ICategory {
+    Id : int <<get>> <<set>>
+    Name : string <<get>> <<set>>
+}
+class "List"<T> {
+}
+ICategory --> "PlantCategories<IPlantCategory>" "List"
+interface IPlantCategory {
+    PlantId : int <<get>> <<set>>
+    CategoryId : int <<get>> <<set>>
+}
+IPlantCategory --> "Plant" IPlant
+IPlantCategory --> "Category" ICategory
+interface IOfferFollow {
+    OfferId : int <<get>> <<set>>
+    UserId : int <<get>> <<set>>
+}
+IOfferFollow --> "Offer" IOffer
+IDisplayable <|-- IOfferFollow
+interface IDisplayable {
+    ToDisplay : string <<get>>
+}
+interface IPlant {
+    Id : int <<get>> <<set>>
+    Name : string <<get>> <<set>>
+    WateringFrequency : string <<get>> <<set>>
+    Fertilization : string <<get>> <<set>>
+    Size : int <<get>> <<set>>
+    VegetationStart : string <<get>> <<set>>
+    VegetationEnd : string <<get>> <<set>>
+    Insolation : string <<get>> <<set>>
+    Temperature : int <<get>> <<set>>
+    Categories : string <<get>>
+}
+IPlant --> "PlantCategories<IPlantCategory>" "List"
+IPlant --> "CategoriesList<string>" "List"
+class Plant {
+    + Id : int <<get>> <<set>>
+    + Name : string <<get>> <<set>>
+    + WateringFrequency : string <<get>> <<set>>
+    + Fertilization : string <<get>> <<set>>
+    + Size : int <<get>> <<set>>
+    + VegetationStart : string <<get>> <<set>>
+    + VegetationEnd : string <<get>> <<set>>
+    + Insolation : string <<get>> <<set>>
+    + Temperature : int <<get>> <<set>>
+    + Categories : string <<get>>
+    + ToDisplay : string <<get>>
+    + Plant(id, name, image, wateringFrequency, fertilization, size, vegetationStart, vegetationEnd, insolation, temperature)
+    + <<override>> Equals(obj:object?) : bool
+    + <<override>> ToString() : string
+}
+IPlant <|-- Plant
+Plant o-> "PlantCategories<PlantCategory>" "List"
+Plant --> "CategoriesList<string>" "List"
+Plant --> "PlantCategories<IPlantCategory>" "List"
+class UserPlant {
+    + UserId : int <<get>> <<set>>
+    + PlantId : int <<get>> <<set>>
+    + UserPlant(userId:int, plantId:int)
+    + UserPlant(user:User, plant:Plant)
+    + <<override>> Equals(obj:object?) : bool
+}
+UserPlant o-u-> "User" User
+UserPlant o-> "Plant" Plant
+UserPlant --> "User" IUser
+UserPlant --> "Plant" IPlant
+IUserPlant <|-- UserPlant
+IUser <|-- User
+class User {
+    + Id : int <<get>> <<set>>
+    + Login : string <<get>> <<set>>
+    + Password : string <<get>> <<set>>
+    + Name : string <<get>> <<set>>
+    + Surname : string <<get>> <<set>>
+    + User(id:int, login:string, password:string, name:string, surname:string)
+    + CheckPassword(password:string) : bool
+    + <<override>> Equals(obj:object?) : bool
+    + <<override>> ToString() : string
+}
+interface IUserPlant {
+    UserId : int <<get>> <<set>>
+    PlantId : int <<get>> <<set>>
+}
+IUserPlant --> "Plant" IPlant
+IUserPlant --> "User" IUser
+interface IUser {
+    Id : int <<get>> <<set>>
+    Login : string <<get>> <<set>>
+    Password : string <<get>> <<set>>
+    Name : string <<get>> <<set>>
+    Surname : string <<get>> <<set>>
+    CheckPassword(password:string) : bool
+}
+@enduml

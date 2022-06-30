@@ -1,0 +1,18 @@
+@startuml
+class Offer {
+    + Id : int <<get>> <<set>>
+    + PlantId : int <<get>> <<set>>
+    + ShopId : int <<get>> <<set>>
+    + Availability : int <<get>> <<set>>
+    + Price : decimal <<get>> <<set>>
+    + ToDisplay : string <<get>>
+    + Offer(id:int, plantId:int, shopId:int, availability:int, price:decimal)
+    + <<override>> Equals(obj:object?) : bool
+    + CompareTo(other:IOffer) : int
+}
+IOffer <|-- Offer
+Offer o-> "Plant" Plant
+Offer o-> "Shop" Shop
+Offer --> "Plant" IPlant
+Offer --> "Shop" IShop
+@enduml

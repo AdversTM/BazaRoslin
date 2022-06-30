@@ -1,0 +1,29 @@
+@startuml
+class OfferDialogViewModel {
+    - _buyCommand : DelegateCommand?
+    - _rateCommand : ICommand?
+    - _followCommand : ICommand?
+    - _isFollowing : bool
+    - _isBuyable : bool
+    + IsFollowing : bool <<get>> <<set>>
+    + Rating : int <<get>> <<set>>
+    + IsBuyable : bool <<get>> <<set>>
+    + OfferDialogViewModel(eventAggregator:IEventAggregator, plantStore:IPlantStore)
+    + <<override>> OnDialogOpened(parameters:IDialogParameters) : void
+    - Buy() : void
+    - Rate(tag:string) : void
+    - Follow() : void
+}
+DialogViewModelBase <|-- OfferDialogViewModel
+OfferDialogViewModel --> "_eventAggregator" IEventAggregator
+OfferDialogViewModel --> "_plantStore" IPlantStore
+OfferDialogViewModel o-> "_user" IUser
+OfferDialogViewModel o-> "_offer" IOffer
+OfferDialogViewModel o-> "_plant" IPlant
+OfferDialogViewModel o-> "_rating" IOfferRating
+OfferDialogViewModel --> "BuyCommand" DelegateCommand
+OfferDialogViewModel --> "RateCommand" ICommand
+OfferDialogViewModel --> "FollowCommand" ICommand
+OfferDialogViewModel --> "Offer" IOffer
+OfferDialogViewModel --> "Plant" IPlant
+@enduml

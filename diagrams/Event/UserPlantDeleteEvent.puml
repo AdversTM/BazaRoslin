@@ -1,0 +1,7 @@
+@startuml
+class UserPlantDeleteEvent {
+}
+class "PubSubEvent`1"<T> {
+}
+"PubSubEvent`1" "<int>" <|-- UserPlantDeleteEvent
+@enduml

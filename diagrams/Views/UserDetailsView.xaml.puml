@@ -1,0 +1,5 @@
+@startuml
+class UserDetailsView <<partial>> {
+    + UserDetailsView()
+}
+@enduml

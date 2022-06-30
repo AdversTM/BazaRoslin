@@ -1,0 +1,9 @@
+@startuml
+abstract class BaseDbContext {
+    + {static} Current() : BaseDbContext
+    - <<readonly>> _connectionString : string
+    # BaseDbContext(connectionString:string)
+    # <<override>> OnConfiguring(options:DbContextOptionsBuilder) : void
+}
+DbContext <|-- BaseDbContext
+@enduml

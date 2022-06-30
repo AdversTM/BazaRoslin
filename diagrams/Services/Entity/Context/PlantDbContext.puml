@@ -1,0 +1,19 @@
+@startuml
+class PlantDbContext {
+    - {static} _current : PlantDbContext?
+    # <<new>> {static} Current() : PlantDbContext
+    + PlantDbContext(connectionString:string)
+    # <<override>> OnModelCreating(modelBuilder:ModelBuilder) : void
+}
+class "DbSet`1"<T> {
+}
+BaseDbContext <|-- PlantDbContext
+PlantDbContext o-> "Categories<Category>" "DbSet`1"
+PlantDbContext o-> "Shops<Shop>" "DbSet`1"
+PlantDbContext o-> "Plants<Plant>" "DbSet`1"
+PlantDbContext o-> "Offers<Offer>" "DbSet`1"
+PlantDbContext o-> "PlantCategories<PlantCategory>" "DbSet`1"
+PlantDbContext o-> "UserPlants<UserPlant>" "DbSet`1"
+PlantDbContext o-> "OfferRatings<OfferRating>" "DbSet`1"
+PlantDbContext o-> "OfferFollows<OfferFollow>" "DbSet`1"
+@enduml

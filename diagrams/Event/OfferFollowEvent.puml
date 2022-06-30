@@ -1,0 +1,7 @@
+@startuml
+class OfferFollowEvent {
+}
+class "PubSubEvent`1"<T> {
+}
+"PubSubEvent`1" "<int>" <|-- OfferFollowEvent
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+class Base64ToImageConverter {
+    - {static} _converter : Base64ToImageConverter?
+    + <<override>> ProvideValue(serviceProvider:IServiceProvider) : object
+    + Convert(value:object, targetType:Type, parameter:object, culture:CultureInfo) : object
+    + ConvertBack(value:object, targetType:Type, parameter:object, culture:CultureInfo) : object
+}
+MarkupExtension <|-- Base64ToImageConverter
+IValueConverter <|-- Base64ToImageConverter
+@enduml

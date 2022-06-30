@@ -1,0 +1,5 @@
+@startuml
+class OffersView <<partial>> {
+    + OffersView()
+}
+@enduml

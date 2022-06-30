@@ -1,0 +1,10 @@
+@startuml
+class OfferRating {
+    + OfferId : int <<get>> <<set>>
+    + UserId : int <<get>> <<set>>
+    + Rating : decimal <<get>> <<set>>
+    + OfferRating(offerId:int, userId:int, rating:decimal)
+    + <<override>> Equals(obj:object?) : bool
+}
+IOfferRating <|-- OfferRating
+@enduml

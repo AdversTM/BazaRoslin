@@ -1,0 +1,6 @@
+@startuml
+class RatingTemplateSelector {
+    + <<override>> SelectTemplate(item:object, container:DependencyObject) : DataTemplate?
+}
+DataTemplateSelector <|-- RatingTemplateSelector
+@enduml

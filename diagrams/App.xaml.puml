@@ -1,0 +1,13 @@
+@startuml
+class App <<partial>> {
+    # <<override>> RegisterTypes(containerRegistry:IContainerRegistry) : void
+    # <<override>> CreateShell() : Window
+    # <<override>> OnInitialized() : void
+}
+class Region <<static>> {
+    + <<const>> TabContentRegion : string
+    + <<const>> DetailsRegion : string
+    + <<const>> OffersRegion : string
+    + <<const>> UserDetailsRegion : string
+}
+@enduml

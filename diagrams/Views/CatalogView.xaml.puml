@@ -1,0 +1,5 @@
+@startuml
+class CatalogView <<partial>> {
+    + CatalogView()
+}
+@enduml

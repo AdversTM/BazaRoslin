@@ -1,0 +1,8 @@
+@startuml
+interface IPlantCategory {
+    PlantId : int <<get>> <<set>>
+    CategoryId : int <<get>> <<set>>
+}
+IPlantCategory --> "Plant" IPlant
+IPlantCategory --> "Category" ICategory
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+class AuthService {
+    + CurrentUser : IUser? <<get>>
+    + IsLogged : bool <<get>>
+    + AuthService(eventAggregator:IEventAggregator)
+}
+IAuthService <|-- AuthService
+AuthService --> "LoggedUser" IUser
+@enduml

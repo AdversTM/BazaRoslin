@@ -1,0 +1,12 @@
+@startuml
+class UserDbContext {
+    - {static} _current : UserDbContext?
+    # <<new>> {static} Current() : UserDbContext
+    + UserDbContext(connectionString:string)
+    # <<override>> OnModelCreating(modelBuilder:ModelBuilder) : void
+}
+class "DbSet`1"<T> {
+}
+BaseDbContext <|-- UserDbContext
+UserDbContext o-> "Users<User>" "DbSet`1"
+@enduml

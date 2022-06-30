@@ -1,0 +1,7 @@
+@startuml
+abstract class "BaseDbRepository`1"<TContext> {
+    # Context : TContext <<get>>
+    # UseContext(func:Func<TContext, T>) : Task<T>
+    # UseContext(action:Action<TContext>) : Task
+}
+@enduml

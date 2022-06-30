@@ -1,0 +1,11 @@
+@startuml
+class DetailsViewModel {
+    - _plant : IPlant?
+    + Plant : IPlant? <<get>> <<set>>
+    + OnNavigatedTo(navigationContext:NavigationContext) : void
+    + IsNavigationTarget(navigationContext:NavigationContext) : bool
+    + OnNavigatedFrom(navigationContext:NavigationContext) : void
+}
+BindableBase <|-- DetailsViewModel
+INavigationAware <|-- DetailsViewModel
+@enduml

@@ -1,0 +1,34 @@
+﻿@startuml
+abstract class BaseDbContext {
+    + {static} Current() : BaseDbContext
+    - <<readonly>> _connectionString : string
+    # BaseDbContext(connectionString:string)
+    # <<override>> OnConfiguring(options:DbContextOptionsBuilder) : void
+}
+DbContext <|-- BaseDbContext
+class PlantDbContext {
+    - {static} _current : PlantDbContext?
+    # <<new>> {static} Current() : PlantDbContext
+    + PlantDbContext(connectionString:string)
+    # <<override>> OnModelCreating(modelBuilder:ModelBuilder) : void
+}
+class "DbSet"<T> {
+}
+BaseDbContext <|-- PlantDbContext
+PlantDbContext o-d-> "Categories<Category>" "DbSet"
+PlantDbContext o-d-> "Shops<Shop>" "DbSet"
+PlantDbContext o-d-> "Plants<Plant>" "DbSet"
+PlantDbContext o-d-> "Offers<Offer>" "DbSet"
+PlantDbContext o-d-> "PlantCategories<PlantCategory>" "DbSet"
+PlantDbContext o-d-> "UserPlants<UserPlant>" "DbSet"
+PlantDbContext o-d-> "OfferRatings<OfferRating>" "DbSet"
+PlantDbContext o-d-> "OfferFollows<OfferFollow>" "DbSet"
+class UserDbContext {
+    - {static} _current : UserDbContext?
+    # <<new>> {static} Current() : UserDbContext
+    + UserDbContext(connectionString:string)
+    # <<override>> OnModelCreating(modelBuilder:ModelBuilder) : void
+}
+BaseDbContext <|-- UserDbContext
+UserDbContext o-u-> "Users<User>" "DbSet"
+@enduml

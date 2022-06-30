@@ -1,0 +1,24 @@
+@startuml
+class OffersViewModel {
+    - _offerCommand : ICommand?
+    + OffersViewModel(plantStore:IPlantStore, dialogService:IDialogService, eventAggregator:IEventAggregator, authService:IAuthService)
+    + <<async>> OnNavigatedTo(navigationContext:NavigationContext) : void
+    + IsNavigationTarget(navigationContext:NavigationContext) : bool
+    + OnNavigatedFrom(navigationContext:NavigationContext) : void
+    - <<async>> OpenOffer(arg:object) : void
+}
+class "ObservableCollection`1"<T> {
+}
+class "HashSet`1"<T> {
+}
+BindableBase <|-- OffersViewModel
+INavigationAware <|-- OffersViewModel
+OffersViewModel --> "_plantStore" IPlantStore
+OffersViewModel --> "_dialogService" IDialogService
+OffersViewModel --> "_authService" IAuthService
+OffersViewModel o-> "_plant" IPlant
+OffersViewModel o-> "_offers<IOffer>" "ObservableCollection`1"
+OffersViewModel o-> "_userPlants<int>" "HashSet`1"
+OffersViewModel --> "Offers<IOffer>" "ObservableCollection`1"
+OffersViewModel --> "OfferCommand" ICommand
+@enduml

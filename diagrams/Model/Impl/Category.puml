@@ -1,0 +1,14 @@
+@startuml
+class Category {
+    + Id : int <<get>> <<set>>
+    + Name : string <<get>> <<set>>
+    + Category(id:int, name:string)
+    + <<override>> Equals(obj:object?) : bool
+    + <<override>> ToString() : string
+}
+class "List`1"<T> {
+}
+ICategory <|-- Category
+Category o-> "PlantCategories<PlantCategory>" "List`1"
+Category --> "PlantCategories<IPlantCategory>" "List`1"
+@enduml

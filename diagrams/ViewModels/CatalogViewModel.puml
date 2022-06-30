@@ -1,0 +1,21 @@
+@startuml
+class CatalogViewModel {
+    - _selectedCommand : ICommand?
+    - _filterText : string = ""
+    + FilterText : string <<get>> <<set>>
+    + CatalogViewModel(plantStore:IPlantStore, regionManager:IRegionManager)
+    - <<async>> LoadPlants() : void
+    - FilterPlants() : void
+    - NavigateDetails(args:SelectionChangedEventArgs) : void
+    # <<override>> OnPropertyChanged(args:PropertyChangedEventArgs) : void
+}
+class "List`1"<T> {
+}
+BindableBase <|-- CatalogViewModel
+CatalogViewModel --> "_plantStore" IPlantStore
+CatalogViewModel --> "_regionManager" IRegionManager
+CatalogViewModel o-> "_plants<IPlant>" "List`1"
+CatalogViewModel o-> "_filteredPlants" ICollectionView
+CatalogViewModel --> "FilteredPlants" ICollectionView
+CatalogViewModel --> "SelectedCommand" ICommand
+@enduml
